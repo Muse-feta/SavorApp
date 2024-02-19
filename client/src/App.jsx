@@ -14,18 +14,20 @@ import Cart from './markup/pages/Cart';
 import CheckOut from './markup/pages/CheckOut';
 import Login from './markup/pages/Login';
 import SignUp from './markup/pages/SignUp';
+import Dashbored from './markup/pages/Admin/Dashbored';
 
 
 const App = () => {
   return (
     <div>
       <Routes>
-        <Route path='/' element={<SharedLayout/>}>
-          <Route path='/' element={<Home/>}/>
-          <Route path='/cart' element={<Cart/>}/>
-          <Route path='/check-out' element={<CheckOut/>}/>
-          <Route path='/login' element={<Login/>}/>
-          <Route path='/signup' element={<SignUp/>}/>
+        <Route path="/" element={<SharedLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/check-out" element={<CheckOut />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/admin/dashbored" element={<Dashbored/>} />
         </Route>
       </Routes>
     </div>
