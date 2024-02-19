@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-image {
+    background-image: url(../src/assets/img/savbg3.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+}
+.bg-image_shop {
+    background-image: url(../src/assets/img/french_fly1.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 450px;
+}
