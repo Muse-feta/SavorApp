@@ -1,10 +1,206 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { MdAttachEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { FaUserEdit } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaAddressBook } from "react-icons/fa";
+import { FaBlenderPhone } from "react-icons/fa";
+import { toast, Bounce } from "react-toastify";
+
+
+import { Link, useNavigate } from "react-router-dom";
+import registerService from '../../../services/register.service';
 
 const SignupForm = () => {
+
+  const [form, setForm] = useState({
+    username: "",
+    phone: "",
+    email: "",
+    password: "",
+    firstname: "",
+    lastname: "",
+    address: "",
+    role: "customer",
+  });
+
+  const navigate = useNavigate()
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let valid = true;
+    if(!form.username){
+         toast.error("Username is required", {
+           position: "top-center",
+           autoClose: 5000,
+           hideProgressBar: false,
+           closeOnClick: true,
+           pauseOnHover: true,
+           draggable: true,
+           progress: undefined,
+           theme: "light",
+           transition: Bounce,
+         });
+         valid = false;
+    }
+        if (!form.phone) {
+          toast.error("Phone number is required", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
+          valid = false;
+        }
+
+            if (!form.email) {
+              toast.error("Email is required", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+              });
+              valid = false;
+            }
+
+                if (!form.password) {
+                  toast.error("Password is required", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                  });
+                  valid = false;
+                }
+
+                   if (!form.password.length > 6) {
+                     toast.error("Password must be at least 6 characters", {
+                       position: "top-center",
+                       autoClose: 5000,
+                       hideProgressBar: false,
+                       closeOnClick: true,
+                       pauseOnHover: true,
+                       draggable: true,
+                       progress: undefined,
+                       theme: "light",
+                       transition: Bounce,
+                     });
+                     valid = false;
+                   }
+
+                    if (!form.firstname) {
+                      toast.error("Firstname is required", {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                        transition: Bounce,
+                      });
+                      valid = false;
+                    }
+
+                        if (!form.lastname) {
+                          toast.error("Lastname is required", {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                            transition: Bounce,
+                          });
+                          valid = false;
+                        }
+
+                            if (!form.address) {
+                              toast.error("Address is required", {
+                                position: "top-center",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme: "light",
+                                transition: Bounce,
+                              });
+                              valid = false;
+                            }
+
+                            if (!valid) {
+                              return;
+                            }
+    try {
+      const response = await registerService.register(form);
+      console.log("response", response);
+      if (response.success === true) {
+        toast.success(response.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+        navigate("/");
+      } else {
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
+
+    } catch (error) {
+      console.log(error);
+          toast.error(error.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
+    }
+  }
   return (
     <div className=" p-11 flex justify-center items-center">
       <div>
@@ -12,7 +208,7 @@ const SignupForm = () => {
           Create New <span className="text-[#f4a53e]">Account</span>
         </h1>
         <div className="md:w-8/12 lg:ml-6 lg:w-[500px]">
-          <form>
+          <form onSubmit={handleSubmit}>
             {/* <!-- Username input --> */}
             <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
               <div className=" mt-[6px] opacity-[30%] mr-2">
@@ -24,38 +220,23 @@ const SignupForm = () => {
                 type="text"
                 name="username"
                 placeholder="User Name"
-                // value={form.username}
-                // onChange={handleChange}
+                value={form.username}
+                onChange={handleChange}
               />
             </div>
-            {/* firstname input */}
+            {/* <!-- phone input --> */}
             <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
               <div className=" mt-[6px] opacity-[30%] mr-2">
-                {<FaUserEdit />}
+                {<FaBlenderPhone />}
               </div>
 
               <input
                 className="outline-none  bg-[#f7f7f7] "
                 type="text"
-                name="firstname"
-                placeholder="First Name"
-                // value={form.username}
-                // onChange={handleChange}
-              />
-            </div>
-            {/* lastname input */}
-            <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
-              <div className=" mt-[6px] opacity-[30%] mr-2">
-                {<FaUserEdit />}
-              </div>
-
-              <input
-                className="outline-none  bg-[#f7f7f7] "
-                type="text"
-                name="lastname"
-                placeholder="Last Name"
-                // value={form.username}
-                // onChange={handleChange}
+                name="phone"
+                placeholder="Phone Number"
+                value={form.phone}
+                onChange={handleChange}
               />
             </div>
             {/* <!-- Email input --> */}
@@ -69,8 +250,8 @@ const SignupForm = () => {
                 type="text"
                 name="email"
                 placeholder="Email"
-                // value={form.username}
-                // onChange={handleChange}
+                value={form.email}
+                onChange={handleChange}
               />
             </div>
             {/* <!--Password input--> */}
@@ -83,10 +264,57 @@ const SignupForm = () => {
                 type="text"
                 name="password"
                 placeholder="Password"
-                //   value={form.password}
-                //   onChange={handleChange}
+                  value={form.password}
+                  onChange={handleChange}
               />
             </div>
+            {/* firstname input */}
+            <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
+              <div className=" mt-[6px] opacity-[30%] mr-2">
+                {<FaUserEdit />}
+              </div>
+
+              <input
+                className="outline-none  bg-[#f7f7f7] "
+                type="text"
+                name="firstname"
+                placeholder="First Name"
+                value={form.firstname}
+                onChange={handleChange}
+              />
+            </div>
+            {/* lastname input */}
+            <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
+              <div className=" mt-[6px] opacity-[30%] mr-2">
+                {<FaUserEdit />}
+              </div>
+
+              <input
+                className="outline-none  bg-[#f7f7f7] "
+                type="text"
+                name="lastname"
+                placeholder="Last Name"
+                value={form.lastname}
+                onChange={handleChange}
+              />
+            </div>
+
+            {/* address input */}
+            <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
+              <div className=" mt-[6px] opacity-[30%] mr-2">
+                {<FaAddressBook />}
+              </div>
+
+              <input
+                className="outline-none  bg-[#f7f7f7] "
+                type="text"
+                name="address"
+                placeholder="Address"
+                value={form.address}
+                onChange={handleChange}
+              />
+            </div>
+
             {/* Hello, how about our team meeting */}
             <p className=" m-2 text-sm">
               <Link to="/login">

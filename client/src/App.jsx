@@ -15,6 +15,12 @@ import CheckOut from './markup/pages/CheckOut';
 import Login from './markup/pages/Login';
 import SignUp from './markup/pages/SignUp';
 import Dashbored from './markup/pages/Admin/Dashbored';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ForgotPass from './markup/pages/ForgotPass';
+import ResetPassword from './markup/pages/ResetPassword';
+
+
 
 
 const App = () => {
@@ -27,9 +33,12 @@ const App = () => {
           <Route path="/check-out" element={<CheckOut />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/admin/dashbored" element={<Dashbored/>} />
+          <Route path="/admin/dashbored" element={<Dashbored />} />
+          <Route path="/forgot-password" element={<ForgotPass />} />
+          <Route path="/reset-password/:token" element={<ResetPassword/>} />
         </Route>
       </Routes>
+      <ToastContainer />
     </div>
   );
 }

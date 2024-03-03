@@ -51,10 +51,26 @@ const createUser = async (user) => {
 
 }
 
+const getUserByEmail = async ( email ) => {
+    const query = 'SELECT * FROM users INNER JOIN users_info ON users.user_id = users_info.user_id WHERE email = ?';
+    const rows = await pool.query(query, [email]);
+    return rows[0]
+}
+
+const resetPassword = async (password, email) => {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const query = 'UPDATE users SET password = ? WHERE email = ?';
+    const rows = await pool.query(query, [hashedPassword, email]);
+    return rows[0]
+}
+
 
 const userService = {
     isUserExist,
-    createUser
+    createUser,
+    getUserByEmail,
+    resetPassword
 }
 
 module.exports = userService

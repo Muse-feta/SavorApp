@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+var nodemailer = require("nodemailer");
 const userService = require('../Services/users.service');
 require('dotenv').config()
 
@@ -44,5 +45,85 @@ const register = async (req, res) => {
     
 }
 
-const userController = { register };
+const forgotPassword = async (req, res) => {
+    try {
+        console.log(req.body)
+        const user = await userService.getUserByEmail(req.body.email);
+        console.log(user)
+        if (!user.length > 0) {
+          return res.status(403).json({
+            success: false,
+            message: "Invalid email",
+          });
+        }
+
+        const token = jwt.sign({ email: user[0].email }, process.env.JWT_SECRET, {
+          expiresIn: "1h",
+        });
+
+        var transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASS,
+          },
+        });
+
+        var mailOptions = {
+          from: process.env.EMAIL,
+          to: user[0].email,
+          subject: "Password Reset",
+          text: `Click here to reset your password: http://localhost:5173/reset-password/${token}`,
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log("Error: " + error);
+          } else {
+            console.log("Email sent: " + info.response);
+          }
+        });
+
+        return res.status(200).json({
+          success: true,
+          message: "Password reset link sent to your email",
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const resetPassword = async (req, res) => {
+    try {
+        const decoded = jwt.verify(req.params.token, process.env.JWT_SECRET);
+       // check if token is not verfied yet or expired token 
+        if (!decoded) {
+            return res.status(403).json({
+                success: false,
+                message: 'Invalid Token'
+            })
+        }
+
+        const resetPassword = await userService.resetPassword(req.body.password, decoded.email);
+        if(resetPassword) {
+            return res.status(200).json({
+                success: true,
+                message: 'Password reset successfully'
+            })
+        }else {
+            return res.status(500).json({
+                success: false,
+                message: 'Invalid Token'
+            })
+        }
+    }catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Invalid Token'
+        })
+       
+    }
+}
+
+const userController = { register, forgotPassword, resetPassword };
 module.exports = userController
