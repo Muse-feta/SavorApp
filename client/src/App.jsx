@@ -19,6 +19,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ForgotPass from './markup/pages/ForgotPass';
 import ResetPassword from './markup/pages/ResetPassword';
+import AddCatagory from './markup/pages/Admin/AddCatagory';
 
 
 
@@ -33,9 +34,10 @@ const App = () => {
           <Route path="/check-out" element={<CheckOut />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/admin/dashbored" element={<Dashbored />} />
           <Route path="/forgot-password" element={<ForgotPass />} />
-          <Route path="/reset-password/:token" element={<ResetPassword/>} />
+          <Route path="/admin/dashbored" element={<Dashbored />} />
+          <Route path="/admin/add-catagory" element={<AddCatagory/>} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Route>
       </Routes>
       <ToastContainer />
