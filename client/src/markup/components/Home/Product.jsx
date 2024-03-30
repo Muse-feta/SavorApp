@@ -35,7 +35,7 @@ const Product = () => {
           </div>
 
           <div class="row">
-            {catagory?.map((catagory) => (
+            {catagory?.map((catagory) => ( 
               <div class="col-lg-4 col-md-6 text-center">
                 <div class="single-product-item">
                   <div class="product-image">

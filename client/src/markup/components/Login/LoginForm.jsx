@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import { MdAttachEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, json, useNavigate } from 'react-router-dom';
 import { toast, Bounce } from "react-toastify";
 import loginService from "../../../services/login.service"
+import { useDispatch } from 'react-redux';
+
 
 const LoginForm = () => {
+
 
   const [form, setForm] = useState({
     email: "",
@@ -63,7 +66,9 @@ const LoginForm = () => {
     try {
       const response = await loginService.login(form);
       
-        console.log(response);
+      if(response.token){
+        localStorage.setItem("token", response.token);
+      }
       if (response.success === true) {
         toast.success(response.message, {
           position: "top-center",
@@ -114,7 +119,7 @@ const LoginForm = () => {
         <div className="md:w-8/12 lg:ml-6 lg:w-[500px]">
           <form onSubmit={handleSubmit}>
             {/* <!-- Email input --> */}
-            <div className="flex border-l-4 border-[#f4a53e] p-4 bg-[#fbfbfb] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
+            <div className="flex border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
               <div className=" mt-[6px] opacity-[30%] mr-2">
                 {<MdAttachEmail />}
               </div>

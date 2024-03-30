@@ -51,18 +51,25 @@ const Header = () => {
                     <li>
                       <a href="contact.html">Contact</a>
                     </li>
+                    <li>
+                      <Link to="/admin/dashbored">Admin</Link>
+                    </li>
 
                     <li>
                       <div class="header-icons">
                         <Link class="shopping-cart" to="/cart">
                           <i class="fas fa-shopping-cart"></i>
                         </Link>
+
                         <Link
                           className=" bg-[#f4a53e] rounded-3xl py-2 hover:bg-[#fff] hover:text-white hover:scale-105"
                           to="/login"
                         >
                           Login
                         </Link>
+                       
+                         
+                        
                       </div>
                     </li>
                   </ul>

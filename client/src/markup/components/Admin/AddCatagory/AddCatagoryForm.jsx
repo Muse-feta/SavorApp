@@ -1,24 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import { TfiWrite } from "react-icons/tfi";
-import catagoryServices from '../../../../services/catagory.service';
-import { toast, Bounce } from 'react-toastify';
+import catagoryServices from "../../../../services/catagory.service";
+import { toast, Bounce } from "react-toastify";
 
 const AddCatagoryForm = () => {
+  const [catName, setCatName] = useState("");
+  console.log(catName);
+  const [file, setFile] = useState("");
 
-  const [catName, setCatName] = useState('');
-  console.log(catName)
-  const [file, setFile] = useState('');
-
-   const handleFile = (e) => {
-     setFile(e.target.files[0]);
-   };
-   const handleChange = (e) => {
-     setCatName(e.target.value);
-   };
+  const handleFile = (e) => {
+    setFile(e.target.files[0]);
+  };
+  const handleChange = (e) => {
+    setCatName(e.target.value);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     let valid = true;
-    if(!catName){
+    if (!catName) {
       toast.error("Catagory name is required", {
         position: "top-center",
         autoClose: 5000,
@@ -29,10 +28,10 @@ const AddCatagoryForm = () => {
         progress: undefined,
         theme: "light",
         transition: Bounce,
-      })
-      valid = false
+      });
+      valid = false;
     }
-    if(!file){
+    if (!file) {
       toast.error("Catagory image is required", {
         position: "top-center",
         autoClose: 5000,
@@ -43,19 +42,19 @@ const AddCatagoryForm = () => {
         progress: undefined,
         theme: "light",
         transition: Bounce,
-      })
-      valid = false
+      });
+      valid = false;
     }
     if (!valid) {
-      return
+      return;
     }
     const formData = new FormData();
-    console.log(formData)
-    formData.append("image", file); 
-    formData.append("name", catName);  
+    console.log(formData);
+    formData.append("image", file);
+    formData.append("name", catName);
     try {
       const res = await catagoryServices.fileUpload(formData);
-      console.log(res)
+      console.log(res);
       if (res.success === true) {
         toast.success("Catagory added successfully", {
           position: "top-center",
@@ -66,24 +65,24 @@ const AddCatagoryForm = () => {
           draggable: true,
           progress: undefined,
           theme: "light",
-          transition: Bounce,})
+          transition: Bounce,
+        });
       }
-      setCatName('')
-      setFile('')
-    } catch (error) { 
-      console.log(error)
+      setCatName("");
+      setFile("");
+    } catch (error) {
+      console.log(error);
     }
-  }
-  console.log(file)
+  };
+  console.log(file);
 
- 
   return (
-    <div className=" p-11 flex justify-center items-center">
+    <div className=" p-3 md:p-11 flex justify-center items-center ">
       <div>
-        <h1 className=" text-left text-3xl m-5 font-extrabold">
+        <h1 className=" text-left text-3xl m-5 font-extrabold w-7/12">
           Add<span className="text-[#f4a53e]"> Catagory</span>
         </h1>
-        <div className="md:w-8/12 lg:ml-6 lg:w-[500px]">
+        <div className=" w-7/12 md:w-8/12 lg:ml-6 lg:w-[500px]">
           <form onSubmit={handleSubmit}>
             {/* <!-- Add Catagory input --> */}
             <div className="flex border-l-4 border-[#f4a53e] p-4 bg-[#fbfbfb] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
@@ -120,6 +119,6 @@ const AddCatagoryForm = () => {
       </div>
     </div>
   );
-}
+};
 
-export default AddCatagoryForm
+export default AddCatagoryForm;
