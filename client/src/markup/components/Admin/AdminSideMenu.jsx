@@ -15,7 +15,7 @@ const AdminSideMenu = () => {
   return (
     <div
       className={`${
-        hide ? " w-[50px] md:w-[100px]" : "w-[300px]"
+        hide ? " w-[50px] md:w-[100px] " : "w-[300px] z-50"
       } p-3 text-center border shadow-2xl`}
     >
       <div className=" md:m-4">
@@ -31,71 +31,88 @@ const AdminSideMenu = () => {
           />
         )}
       </div>
-      <Link to="/admin/dashbored">
-        <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
-          <div
-            className={`${!hide ? " hidden md:block md:text-3xl" : "text-3xl"}`}
-          >
-            <FaTachometerAlt />
-          </div>
-          {hide ? null : <h className=" block">Dashbored</h>}
-        </div>
-      </Link>
 
-      <Link to="/admin/add-catagory">
-        <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
-          <div
-            className={`${!hide ? " hidden md:block md:text-3xl" : "text-3xl"}`}
-          >
-            <MdBookmarkAdd />
-          </div>
-          {hide ? null : <h className=" block">Add Catagory</h>}
-        </div>
-      </Link>
+      {
+        <div>
+          <Link to="/admin/dashbored">
+            <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
+              <div
+                className={`${
+                  !hide ? " hidden md:block md:text-3xl" : "text-3xl"
+                }`}
+              >
+                <FaTachometerAlt />
+              </div>
+              {hide ? null : <h className=" block">Dashbored</h>}
+            </div>
+          </Link>
 
-      <Link to="/admin/add-item">
-        <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
-          <div
-            className={`${!hide ? " hidden md:block md:text-3xl" : "text-3xl"}`}
-          >
-            <FaCalendarPlus />
-          </div>
-          {hide ? null : <h className=" block">Add Item</h>}
-        </div>
-      </Link>
+          <Link to="/admin/add-catagory">
+            <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
+              <div
+                className={`${
+                  !hide ? " hidden md:block md:text-3xl" : "text-3xl"
+                }`}
+              >
+                <MdBookmarkAdd />
+              </div>
+              {hide ? null : <h className=" block">Add Catagory</h>}
+            </div>
+          </Link>
 
-      <Link to="/admin/analytics">
-        <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
-          <div
-            className={`${!hide ? " hidden md:block md:text-3xl" : "text-3xl"}`}
-          >
-            <IoMdAnalytics />
-          </div>
-          {hide ? null : <h className=" block">Analytics</h>}
-        </div>
-      </Link>
+          <Link to="/admin/add-item">
+            <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
+              <div
+                className={`${
+                  !hide ? " hidden md:block md:text-3xl" : "text-3xl"
+                }`}
+              >
+                <FaCalendarPlus />
+              </div>
+              {hide ? null : <h className=" block">Add Item</h>}
+            </div>
+          </Link>
 
-      <Link to="/admin/orders">
-        <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
-          <div
-            className={`${!hide ? " hidden md:block md:text-3xl" : "text-3xl"}`}
-          >
-            <FaShoppingBasket />
-          </div>
-          {hide ? null : <h className=" block ">Orders</h>}
-        </div>
-      </Link>
+          <Link to="/admin/analytics">
+            <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
+              <div
+                className={`${
+                  !hide ? " hidden md:block md:text-3xl" : "text-3xl"
+                }`}
+              >
+                <IoMdAnalytics />
+              </div>
+              {hide ? null : <h className=" block">Analytics</h>}
+            </div>
+          </Link>
 
-      <Link to="/admin/users">
-        <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
-          <div
-            className={`${!hide ? " hidden md:block md:text-3xl" : "text-3xl"}`}
-          >
-            <FaUsersCog />
-          </div>
-          {hide ? null : <h className=" block">Users</h>}
+          <Link to="/admin/orders">
+            <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
+              <div
+                className={`${
+                  !hide ? " hidden md:block md:text-3xl" : "text-3xl"
+                }`}
+              >
+                <FaShoppingBasket />
+              </div>
+              {hide ? null : <h className=" block ">Orders</h>}
+            </div>
+          </Link>
+
+          <Link to="/admin/users">
+            <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
+              <div
+                className={`${
+                  !hide ? " hidden md:block md:text-3xl" : "text-3xl"
+                }`}
+              >
+                <FaUsersCog />
+              </div>
+              {hide ? null : <h className=" block">Users</h>}
+            </div>
+          </Link>
         </div>
-      </Link>
+      }
     </div>
   );
 };
