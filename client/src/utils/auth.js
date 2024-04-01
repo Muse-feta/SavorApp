@@ -1,15 +1,14 @@
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
-import { setCredentials } from "../features/auth/authSlice";
+import { decodeToken } from "../features/auth/authSlice";
 
 
-const getAuth = async () => {
-    const dispatch = useDispatch();
-  const token = await localStorage.getItem("token");
+const getAuth = () => {
+  const token = localStorage.getItem("token");
+  const dispatch = useDispatch();
 
   if (token) {
-    const decodedToken = await jwtDecode(token);
-    // dispatch(setCredentials({ user: jwtDecode(token) }));
+    const decodedToken = jwtDecode(token);
     return decodedToken;
   }
 
