@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import sav_logo from "../../assets/img/sav_logo.png"
 import { Link } from 'react-router-dom';
-import getAuth from '../../utils/auth';
-import { useDispatch } from 'react-redux';
-import { decodeToken } from '../../features/auth/authSlice';
 
 const Header = () => {
    const [show, handleShow] = useState(false);
-   const dispatch = useDispatch();
-   const userData = getAuth()
-   dispatch(decodeToken(userData))
    
+  
 
    useEffect(() => {
      window.addEventListener("scroll", () => {

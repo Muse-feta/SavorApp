@@ -5,11 +5,12 @@ import { Link, json, useNavigate } from 'react-router-dom';
 import { toast, Bounce } from "react-toastify";
 import loginService from "../../../services/login.service"
 import { useDispatch } from 'react-redux';
+import { setCredentils } from '../../../features/auth/auth';
 
 
 const LoginForm = () => {
 
-
+  const dispatch = useDispatch();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -68,6 +69,7 @@ const LoginForm = () => {
       
       if(response.token){
         localStorage.setItem("token", response.token);
+        dispatch(setCredentils({token: response.token}));
       }
       if (response.success === true) {
         toast.success(response.message, {
@@ -124,7 +126,7 @@ const LoginForm = () => {
                 {<MdAttachEmail />}
               </div>
               <input
-                className="outline-none   bg-[#fbfbfb]  "
+                className="outline-none   bg-[#f7f7f7]  "
                 type="email"
                 name="email"
                 placeholder="Email"
