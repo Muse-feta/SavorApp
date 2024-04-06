@@ -4,11 +4,11 @@ import { RiLockPasswordFill } from "react-icons/ri";
 import { FaUserEdit } from "react-icons/fa";
 import { FaAddressBook } from "react-icons/fa";
 import { FaBlenderPhone } from "react-icons/fa";
-import { toast, Bounce } from "react-toastify";
-
-
-import { Link, useNavigate } from "react-router-dom";
+import { toast, Bounce } from "react-toastify";import { Link, useNavigate } from "react-router-dom";
 import registerService from '../../../services/register.service';
+import getAuth from '../../../utils/auth';
+import { setCredentils, setIsAdmin, setIsLogin } from '../../../features/auth/auth';
+import { useDispatch } from "react-redux";
 
 const SignupForm = () => {
 
@@ -24,6 +24,7 @@ const SignupForm = () => {
   });
 
   const navigate = useNavigate()
+  const dispatch = useDispatch();
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -159,6 +160,15 @@ const SignupForm = () => {
     try {
       const response = await registerService.register(form);
       console.log("response", response);
+      if (response.token) {
+        localStorage.setItem("token", response.token);
+      }
+      const userData = getAuth();
+      dispatch(setCredentils({ user: userData, token: response.token }));
+      dispatch(setIsLogin(true));
+      if (userData.role === "admin") {
+        dispatch(setIsAdmin(true));
+      }
       if (response.success === true) {
         toast.success(response.message, {
           position: "top-center",

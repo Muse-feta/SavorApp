@@ -20,11 +20,26 @@ import "react-toastify/dist/ReactToastify.css";
 import ForgotPass from './markup/pages/ForgotPass';
 import ResetPassword from './markup/pages/ResetPassword';
 import AddCatagory from './markup/pages/Admin/AddCatagory';
-
+import { useDispatch, useSelector } from 'react-redux';
+import getAuth from './utils/auth';
+import { setCredentils, setIsAdmin, setIsLogin } from './features/auth/auth';
 
 
 
 const App = () => {
+  const dispatch = useDispatch();
+   const userData = getAuth();
+  const token = localStorage.getItem("token");
+  React.useEffect(() => {
+    if (token) {
+      dispatch(setCredentils({ user: userData, token: token }));
+      dispatch(setIsLogin(true));
+      if (userData.role === "admin") {
+        dispatch(setIsAdmin(true));
+      }
+    }
+  }, [token, dispatch]);
+   
   return (
     <div>
       <Routes>

@@ -4,19 +4,19 @@ import { RiLockPasswordFill } from "react-icons/ri";
 import { Link, json, useNavigate } from 'react-router-dom';
 import { toast, Bounce } from "react-toastify";
 import loginService from "../../../services/login.service"
-import { useDispatch } from 'react-redux';
-import { setCredentils } from '../../../features/auth/auth';
-
+import { useDispatch } from "react-redux";
+import { setCredentils, setIsAdmin, setIsLogin } from '../../../features/auth/auth';
+import getAuth from '../../../utils/auth';
 
 const LoginForm = () => {
 
-  const dispatch = useDispatch();
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setForm({
@@ -69,8 +69,13 @@ const LoginForm = () => {
       
       if(response.token){
         localStorage.setItem("token", response.token);
-        dispatch(setCredentils({token: response.token}));
       }
+      const userData = getAuth();
+       dispatch(setCredentils({ user: userData, token: response.token }));
+       dispatch(setIsLogin(true));
+       if (userData.role === "admin") {
+         dispatch(setIsAdmin(true));
+       }
       if (response.success === true) {
         toast.success(response.message, {
           position: "top-center",

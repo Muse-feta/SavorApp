@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import sav_logo from "../../assets/img/sav_logo.png"
 import { Link } from 'react-router-dom';
+import { setCredentils, setIsAdmin, setIsLogin } from '../../features/auth/auth';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Header = () => {
    const [show, handleShow] = useState(false);
+   const dispatch = useDispatch();
+  const isLogin = useSelector((state) => state.auth.isLogin);
+
+   const logout = () => {
+     localStorage.clear();
+     dispatch(setCredentils(null));
+     dispatch(setIsLogin(false));
+     dispatch(setIsAdmin(false));
+   };
    
   
 
@@ -63,15 +74,23 @@ const Header = () => {
                           <i class="fas fa-shopping-cart"></i>
                         </Link>
 
-                        <Link
-                          className=" bg-[#f4a53e] rounded-3xl py-2 hover:bg-[#fff] hover:text-white hover:scale-105"
-                          to="/login"
-                        >
-                          Login
-                        </Link>
+                        {isLogin ? (
+                          <Link
+                            className=" bg-[#f4a53e] rounded-3xl py-2 hover:bg-[#fff] hover:text-white hover:scale-105"
+                            to="/login"
+                            onClick={logout}
+                          >
+                            LogOut
+                          </Link>
+                        ) : (
+                          <Link
+                            className=" bg-[#f4a53e] rounded-3xl py-2 hover:bg-[#fff] hover:text-white hover:scale-105"
+                            to="/login"
+                          >
+                            Login
+                          </Link>)}
+
                        
-                         
-                        
                       </div>
                     </li>
                   </ul>
