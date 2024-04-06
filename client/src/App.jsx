@@ -23,6 +23,8 @@ import AddCatagory from './markup/pages/Admin/AddCatagory';
 import { useDispatch, useSelector } from 'react-redux';
 import getAuth from './utils/auth';
 import { setCredentils, setIsAdmin, setIsLogin } from './features/auth/auth';
+import PrivateAuthRoute from './markup/components/Authorization/PrivateAuthRoute';
+import Unauthorized from './markup/pages/Unauthorized';
 
 
 
@@ -50,8 +52,16 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPass />} />
-          <Route path="/admin/dashbored" element={<Dashbored />} />
-          <Route path="/admin/add-catagory" element={<AddCatagory/>} />
+          <Route path="/unauthorized" element={<Unauthorized/>} />
+          <Route
+            path="/admin/dashbored"
+            element={
+              <PrivateAuthRoute roles={["admin"]}>
+                <Dashbored />
+              </PrivateAuthRoute>
+            }
+          />
+          <Route path="/admin/add-catagory" element={<AddCatagory />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Route>
       </Routes>

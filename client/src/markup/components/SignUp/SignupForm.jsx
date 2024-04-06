@@ -166,7 +166,7 @@ const SignupForm = () => {
       const userData = getAuth();
       dispatch(setCredentils({ user: userData, token: response.token }));
       dispatch(setIsLogin(true));
-      if (userData.role === "admin") {
+      if (userData?.role === "admin") {
         dispatch(setIsAdmin(true));
       }
       if (response.success === true) {

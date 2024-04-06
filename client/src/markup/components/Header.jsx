@@ -8,6 +8,7 @@ const Header = () => {
    const [show, handleShow] = useState(false);
    const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.auth.isLogin);
+  const isAdmin = useSelector((state) => state.auth.isAdmin);
 
    const logout = () => {
      localStorage.clear();
@@ -64,9 +65,11 @@ const Header = () => {
                     <li>
                       <a href="contact.html">Contact</a>
                     </li>
-                    <li>
-                      <Link to="/admin/dashbored">Admin</Link>
-                    </li>
+                    {isAdmin && (
+                      <li>
+                        <Link to="/admin/dashbored">Admin</Link>
+                      </li>
+                    )}
 
                     <li>
                       <div class="header-icons">
@@ -88,9 +91,8 @@ const Header = () => {
                             to="/login"
                           >
                             Login
-                          </Link>)}
-
-                       
+                          </Link>
+                        )}
                       </div>
                     </li>
                   </ul>
