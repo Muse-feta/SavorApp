@@ -52,7 +52,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPass />} />
-          <Route path="/unauthorized" element={<Unauthorized/>} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
           <Route
             path="/admin/dashbored"
             element={
@@ -61,7 +61,14 @@ const App = () => {
               </PrivateAuthRoute>
             }
           />
-          <Route path="/admin/add-catagory" element={<AddCatagory />} />
+          <Route
+            path="/admin/add-catagory"
+            element={
+              <PrivateAuthRoute roles={["admin"]}>
+                <AddCatagory />
+              </PrivateAuthRoute>
+            }
+          />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Route>
       </Routes>
