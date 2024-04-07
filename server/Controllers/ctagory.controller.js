@@ -4,8 +4,6 @@ const catagoryService = require("../Services/catagory.service");
 const uploadFile = async (req, res) => {
   
   const file = req.file.filename;
-  // console.log("file",file)
-  // console.log("cat Name :)", req.body.name);
   
   try {  
       const result = await catagoryService.uploadFile(file, req.body.name);

@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { TfiWrite } from "react-icons/tfi";
 import catagoryServices from "../../../../services/catagory.service";
 import { toast, Bounce } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const AddCatagoryForm = () => {
   const [catName, setCatName] = useState("");
   console.log(catName);
   const [file, setFile] = useState("");
+  const token = useSelector((state) => state.auth.token);
 
   const handleFile = (e) => {
     setFile(e.target.files[0]);
@@ -53,7 +55,7 @@ const AddCatagoryForm = () => {
     formData.append("image", file);
     formData.append("name", catName);
     try {
-      const res = await catagoryServices.fileUpload(formData);
+      const res = await catagoryServices.fileUpload(formData, token);
       console.log(res);
       if (res.success === true) {
         toast.success("Catagory added successfully", {
@@ -67,11 +69,34 @@ const AddCatagoryForm = () => {
           theme: "light",
           transition: Bounce,
         });
+      }else{
+        toast.error(res.message, {
+           position: "top-center",
+           autoClose: 5000,
+           hideProgressBar: false,
+           closeOnClick: true,
+           pauseOnHover: true,
+           draggable: true,
+           progress: undefined,
+           theme: "light",
+           transition: Bounce,
+         });
       }
       setCatName("");
       setFile("");
     } catch (error) {
       console.log(error);
+         toast.error(error.message, {
+           position: "top-center",
+           autoClose: 5000,
+           hideProgressBar: false,
+           closeOnClick: true,
+           pauseOnHover: true,
+           draggable: true,
+           progress: undefined,
+           theme: "light",
+           transition: Bounce,
+         });
     }
   };
   console.log(file);

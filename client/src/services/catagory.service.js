@@ -1,10 +1,14 @@
 const api_url = import.meta.env.VITE_API_URL;
 import axios from "axios";
 
-const fileUpload = async (data) => {
+const fileUpload = async (data, token) => {
   try {
     const response = await axios.post(
-      `${api_url}/catagory/upload`,data
+      `${api_url}/catagory/upload`,data,
+      {
+      headers: {
+        "x-access-token": token}
+      },
     );  
     
     return response.data;

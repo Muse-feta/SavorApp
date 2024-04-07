@@ -67,7 +67,7 @@ const Header = () => {
                     </li>
                     {isAdmin && (
                       <li>
-                        <Link to="/admin/dashbored">Admin</Link>
+                        <Link to="/admin/dashbored">Dashbored</Link>
                       </li>
                     )}
 
