@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TfiWrite } from "react-icons/tfi";
 import catagoryServices from "../../../../services/catagory.service";
 import { toast, Bounce } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const EditCatagoryForm = () => {
@@ -12,6 +13,7 @@ const EditCatagoryForm = () => {
   // console.log(catName);
   const [file, setFile] = useState("");
   const token = useSelector((state) => state.auth.token);
+  const navigate = useNavigate();
 
   const handleFile = (e) => {
     setFile(e.target.files[0]);
@@ -72,6 +74,7 @@ const EditCatagoryForm = () => {
           theme: "light",
           transition: Bounce,
         });
+        navigate("/");
       } else {
         toast.error(res.message, {
           position: "top-center",

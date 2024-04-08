@@ -4,6 +4,7 @@ const api_url = import.meta.env.VITE_API_URL;
 import { MdEditSquare } from "react-icons/md";
 import { MdDeleteSweep } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { toast, Bounce } from "react-toastify";
 import { useSelector } from "react-redux";
 
 const Product = () => {
@@ -25,6 +26,17 @@ const Product = () => {
 
    const handleDelete = async (id) => {
      const res = await catagoryServices.deleteCatagory(id, token);
+      toast.success("Catagory Deleted Successfully", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
      if (res) {
        fetchCategories(); // Fetch updated categories after deletion
      }
