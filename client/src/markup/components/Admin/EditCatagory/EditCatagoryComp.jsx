@@ -118,7 +118,7 @@ const EditCatagoryForm = () => {
     <div className=" p-3 md:p-11 flex justify-center items-center ">
       <div>
         <h1 className=" text-left text-3xl m-5 font-extrabold w-7/12">
-          Add<span className="text-[#f4a53e]"> Catagory</span>
+          Edit<span className="text-[#f4a53e]"> Catagory</span>
         </h1>
         <div className=" w-7/12 md:w-8/12 lg:ml-6 lg:w-[500px]">
           <form onSubmit={handleSubmit}>
