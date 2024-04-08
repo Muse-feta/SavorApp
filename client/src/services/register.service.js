@@ -22,7 +22,7 @@ const forgotPassword = async (email) => {
 
 const resetPassword = async (password, token) => {
     try {
-        const response = await axios.put(`${api_url}/reset-password/${token}`, {
+        const response = await axios.put(`${api_url}/api/reset-password/${token}`, {
           password: password,
         });
         return response.data;

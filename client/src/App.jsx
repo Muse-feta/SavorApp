@@ -25,6 +25,7 @@ import getAuth from './utils/auth';
 import { setCredentils, setIsAdmin, setIsLogin } from './features/auth/auth';
 import PrivateAuthRoute from './markup/components/Authorization/PrivateAuthRoute';
 import Unauthorized from './markup/pages/Unauthorized';
+import EditCatagory from './markup/pages/Admin/EditCatagory';
 
 
 
@@ -53,6 +54,7 @@ const App = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPass />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route
             path="/admin/dashbored"
             element={
@@ -69,7 +71,14 @@ const App = () => {
               </PrivateAuthRoute>
             }
           />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route
+            path="/admin/edit-catagory/:id"
+            element={
+              <PrivateAuthRoute roles={["admin"]}>
+                <EditCatagory />
+              </PrivateAuthRoute>
+            }
+          />
         </Route>
       </Routes>
       <ToastContainer />

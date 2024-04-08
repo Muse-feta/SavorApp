@@ -1,21 +1,38 @@
 import React, { useEffect, useState } from "react";
-import butty from "../../../assets/img/products/butty.webp";
-import chebshebsa from "../../../assets/img/products/chechebsa.webp";
-import coca from "../../../assets/img/products/coca.jpg";
 import catagoryServices from "../../../services/catagory.service";
+const api_url = import.meta.env.VITE_API_URL;
+import { MdEditSquare } from "react-icons/md";
+import { MdDeleteSweep } from "react-icons/md";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Product = () => {
 
   const [catagory, setCatagory] = useState([]);
+  const isAdmin = useSelector((state) => state.auth.isAdmin);
+  const token = useSelector((state) => state.auth.token);
 
-  useEffect(() => {
-    const res = catagoryServices.getFiles();
 
-    res.then((result) => {
-      console.log(result);
-      setCatagory(result.data);
-    });
-  }, [])
+
+   const fetchCategories = async () => {
+     const res = await catagoryServices.getFiles();
+     setCatagory(res.data);
+   };
+
+ useEffect(() => {
+   fetchCategories();
+ }, []);
+
+   const handleDelete = async (id) => {
+     const res = await catagoryServices.deleteCatagory(id, token);
+     if (res) {
+       fetchCategories(); // Fetch updated categories after deletion
+     }
+   };
+
+  
+
+
   return (
     <div className=" mt-[630px] md:mt-[450px]">
       <div class="product-section mt-150 mb-150">
@@ -35,14 +52,14 @@ const Product = () => {
           </div>
 
           <div class="row">
-            {catagory?.map((catagory) => ( 
+            {catagory?.map((catagory) => (
               <div class="col-lg-4 col-md-6 text-center">
                 <div class="single-product-item">
                   <div class="product-image">
                     <a href="single-product.html">
                       <img
                         className=" h-[220px]"
-                        src={`http://localhost:8000/images/` + catagory.image_url}
+                        src={`${api_url}/images/` + catagory.image_url}
                         alt=""
                       />
                     </a>
@@ -52,6 +69,21 @@ const Product = () => {
                   <a href="cart.html" class="cart-btn">
                     <i class="fas fa-shopping-cart"></i> See Details
                   </a>
+
+                  {isAdmin && (
+                    <div className=" flex justify-evenly my-3 mx-32">
+                      <Link
+                        to={`/admin/edit-catagory/${catagory.category_id}`}
+                        className=" text-3xl"
+                      >
+                        <MdEditSquare />
+                      </Link>
+
+                      <Link className=" text-3xl" onClick={() => handleDelete(catagory.category_id)}>
+                        <MdDeleteSweep />
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
