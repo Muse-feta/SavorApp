@@ -8,8 +8,8 @@ const EditCatagoryForm = () => {
   const [catName, setCatName] = useState("");
   // get id from the url
   const id = window.location.pathname.split("/")[3];
-  console.log(id)
-  console.log(catName);
+  // console.log(id)
+  // console.log(catName);
   const [file, setFile] = useState("");
   const token = useSelector((state) => state.auth.token);
 
@@ -59,7 +59,7 @@ const EditCatagoryForm = () => {
     formData.append("name", catName);
     try {
       const res = await catagoryServices.updateCatagory(id,token,formData);
-      console.log(res);
+      // console.log(res);
       if (res.success === true) {
         toast.success("Catagory updated successfully", {
           position: "top-center",
@@ -104,9 +104,9 @@ const EditCatagoryForm = () => {
   };
   useEffect(() => {
     const res = catagoryServices.getCatagoryById(id, token).then((res) => {
-      console.log(res);
+      // console.log(res);
       setCatName(res.data[0].name);
-      setFile(res.data[0].image_url);
+      // setFile(res.data[0].image_url);
     });
   }, []);
   console.log(file);

@@ -22,5 +22,5 @@ router.delete(
   [authMidleware.verifyToken, authMidleware.isAdmin],
   catagoryController.deleteCatagory
 );
-
-module.exports = router;
+ 
+module.exports = router; 
