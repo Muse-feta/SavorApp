@@ -3,6 +3,7 @@ import catagoryServices from "../../../services/catagory.service";
 const api_url = import.meta.env.VITE_API_URL;
 import { MdEditSquare } from "react-icons/md";
 import { MdDeleteSweep } from "react-icons/md";
+import { MdAssignmentAdd } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { toast, Bounce } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -78,12 +79,18 @@ const Product = () => {
                   </div>
                   <h3>{catagory.name}</h3>
 
-                  <a href="cart.html" class="cart-btn">
+                  <Link to={`/menu-items/${catagory.category_id}`} class="cart-btn">
                     <i class="fas fa-shopping-cart"></i> See Details
-                  </a>
+                  </Link>
 
                   {isAdmin && (
                     <div className=" flex justify-evenly my-3 mx-32">
+                      <Link
+                        to={`/admin/add-menu-items/${catagory.category_id}`}
+                        className=" text-3xl"
+                      >
+                        <MdAssignmentAdd />
+                      </Link>
                       <Link
                         to={`/admin/edit-catagory/${catagory.category_id}`}
                         className=" text-3xl"
@@ -91,7 +98,10 @@ const Product = () => {
                         <MdEditSquare />
                       </Link>
 
-                      <Link className=" text-3xl" onClick={() => handleDelete(catagory.category_id)}>
+                      <Link
+                        className=" text-3xl"
+                        onClick={() => handleDelete(catagory.category_id)}
+                      >
                         <MdDeleteSweep />
                       </Link>
                     </div>

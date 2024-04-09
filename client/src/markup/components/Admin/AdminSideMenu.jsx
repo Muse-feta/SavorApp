@@ -60,7 +60,7 @@ const AdminSideMenu = () => {
             </div>
           </Link>
 
-          <Link to="/admin/add-item">
+          {/* <Link to="/admin/add-menu-items/">
             <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
               <div
                 className={`${
@@ -71,7 +71,7 @@ const AdminSideMenu = () => {
               </div>
               {hide ? null : <h className=" block">Add Item</h>}
             </div>
-          </Link>
+          </Link> */}
 
           <Link to="/admin/analytics">
             <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">

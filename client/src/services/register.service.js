@@ -4,7 +4,7 @@ import axios from "axios";
 
 const register = async (data) => {
     try {
-        const response = await axios.post(`${api_url}/register`, data);
+        const response = await axios.post(`${api_url}/api/register`, data);
         return response.data;
     } catch (error) {
         return error.response.data;
@@ -13,7 +13,7 @@ const register = async (data) => {
 
 const forgotPassword = async (email) => {
     try {
-        const response = await axios.post(`${api_url}/forgot-password`, {email: email});
+        const response = await axios.post(`${api_url}/api/forgot-password`, {email: email});
         return response.data; 
     }catch (error) {
         return error.response.data

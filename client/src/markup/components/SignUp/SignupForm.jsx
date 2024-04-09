@@ -162,10 +162,11 @@ const SignupForm = () => {
       console.log("response", response);
       if (response.token) {
         localStorage.setItem("token", response.token);
+        const userData = getAuth();
+        dispatch(setCredentils({ user: userData, token: response.token }));
+        dispatch(setIsLogin(true));
       }
       const userData = getAuth();
-      dispatch(setCredentils({ user: userData, token: response.token }));
-      dispatch(setIsLogin(true));
       if (userData?.role === "admin") {
         dispatch(setIsAdmin(true));
       }

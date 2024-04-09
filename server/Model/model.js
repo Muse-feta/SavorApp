@@ -28,14 +28,14 @@ const Categories = `CREATE TABLE IF NOT EXISTS Categories (
 // -- Create Menu_Items table with image_url column
 const Menu_Items = `CREATE TABLE IF NOT EXISTS Menu_Items (
     item_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
-    description TEXT,
-    price DECIMAL(10, 2),
-    category_id INT,
-    image_url VARCHAR(255), 
+    category_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    image_url VARCHAR(255) NOT NULL, 
     FOREIGN KEY (category_id) REFERENCES Categories(category_id)
 )`;
-
+ 
 // -- Create Orders table
 const Orders = `CREATE TABLE IF NOT EXISTS Orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
