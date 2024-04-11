@@ -3,8 +3,11 @@ import sav_logo from "../../assets/img/sav_logo.png"
 import { Link } from 'react-router-dom';
 import { setCredentils, setIsAdmin, setIsLogin } from '../../features/auth/auth';
 import { useDispatch, useSelector } from 'react-redux';
+import { useCart } from "react-use-cart";
 
 const Header = () => {
+   const { isEmpty, totalUniqueItems, items, updateItemQuantity, removeItem } =
+     useCart();
    const [show, handleShow] = useState(false);
    const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.auth.isLogin);
@@ -73,7 +76,7 @@ const Header = () => {
 
                     <li>
                       <div class="header-icons">
-                        <Link class="shopping-cart" to="/cart">
+                        <Link class="shopping-cart" to={isEmpty ? "/empty-cart" : `/cart`}>
                           <i class="fas fa-shopping-cart"></i>
                         </Link>
 

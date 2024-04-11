@@ -29,6 +29,7 @@ import EditCatagory from './markup/pages/Admin/EditCatagory';
 import AddMenuItems from './markup/pages/Admin/AddMenuItems';
 import MenuItems from './markup/pages/MenuItems';
 import EditMenu from './markup/pages/Admin/EditMenu';
+import EmptyCart from './markup/pages/EmptyCart';
 
 
 
@@ -52,6 +53,7 @@ const App = () => {
         <Route path="/" element={<SharedLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/empty-cart" element={<EmptyCart />} />
           <Route path="/check-out" element={<CheckOut />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
@@ -95,12 +97,10 @@ const App = () => {
             path="/admin/edit-menu-item/:id"
             element={
               <PrivateAuthRoute roles={["admin"]}>
-                <EditMenu/>
+                <EditMenu />
               </PrivateAuthRoute>
             }
           />
-
-
         </Route>
       </Routes>
       <ToastContainer />

@@ -8,14 +8,17 @@ import { Link } from "react-router-dom";
 import { toast, Bounce } from "react-toastify";
 import { useSelector } from "react-redux";
 import menuItemsServices from '../../../services/menuItems.service';
+import { CartProvider, useCart } from "react-use-cart";
 
 const MenuItemsComp = () => {
       const [menuItem, setMenuItem] = useState([]);
       const isAdmin = useSelector((state) => state.auth.isAdmin);
+      const isLogin = useSelector((state) => state.auth.isLogin);
       const token = useSelector((state) => state.auth.token);
       // console.log(token)
       const catagory_id = window. location.pathname.split("/")[2];
       const [openItemIndex, setOpenItemIndex] = useState(null);
+      const { addItem } = useCart();
 
          const fetchCategories = async () => {
           const res = await menuItemsServices.getFilesBymenuItemId(catagory_id);
@@ -41,7 +44,7 @@ const MenuItemsComp = () => {
               });
               if (res) {
                 fetchCategories(); // Fetch updated categories after deletion
-              }
+              }  
             };
 
    
@@ -70,7 +73,7 @@ const MenuItemsComp = () => {
 
           <div class="row">
             {menuItem?.map((menuItem, index) => (
-              <div class="col-lg-4 col-md-6 text-center">
+              <div class="col-lg-4 col-md-6 text-center" key={menuItem.item_id}>
                 <div class="single-product-item">
                   <div class="product-image">
                     <a href="single-product.html">
@@ -91,9 +94,16 @@ const MenuItemsComp = () => {
                   </button>{" "}
                   <br />
                   {openItemIndex === index && <p>{menuItem.description}</p>}
-                  <Link to="/manu-items" class="cart-btn">
+                  <button
+                    class="cart-btn bg-[#F28123] hover:bg-[#F28123] text-white font-bold py-2 px-4 rounded-full"
+                    onClick={
+                      !isLogin
+                        ? () => toast.error("Please Login First")
+                        : () => addItem({ id: menuItem.item_id, ...menuItem })
+                    }
+                  >
                     <i class="fas fa-shopping-cart"></i> Add to Cart
-                  </Link>
+                  </button>
                   {isAdmin && (
                     <div className=" flex justify-evenly my-3 mx-32">
                       <Link

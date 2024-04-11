@@ -41,7 +41,7 @@ const Orders = `CREATE TABLE IF NOT EXISTS Orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    total_amount DECIMAL(10, 2),
+    total_price DECIMAL(10, 2),
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 )`;
 

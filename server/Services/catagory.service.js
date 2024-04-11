@@ -51,7 +51,12 @@ const deleteCatagory = async (id) => {
   try {
     const query = `DELETE FROM Categories WHERE category_id = ?`;
     const rows = await pool.query(query, [id]);
-    console.log(rows[0]);
+    if(rows.affectedRows > 0){
+      const query2 = `DELETE FROM menu_items WHERE category_id = ?`;
+      const rows2 = await pool.query(query2, [id]);
+      // console.log(rows2[0]);
+    }
+    // console.log(rows[0]);
     return rows[0];
   } catch (error) {
     console.log(error);

@@ -1,7 +1,19 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useCart } from 'react-use-cart';
+const api_url = import.meta.env.VITE_API_URL;
+import { FaPlusCircle } from "react-icons/fa";
+import { FaMinusCircle } from "react-icons/fa";
 
 const ProductDetail = () => {
+	const { isEmpty, totalUniqueItems, items, updateItemQuantity, removeItem } =
+    useCart();
+	const total = items.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
+	console.log(items);
+	
   return (
     <div>
         <div class="cart-section mt-150 mb-150">
@@ -20,32 +32,46 @@ const ProductDetail = () => {
 									<th class="product-total">Total</th>
 								</tr>
 							</thead>
-							<tbody>
-								<tr class="table-body-row">
-									<td class="product-remove"><a href="#"><i class="far fa-window-close"></i></a></td>
-									<td class="product-image"><img src="assets/img/products/product-img-1.jpg" alt=""/></td>
-									<td class="product-name">Strawberry</td>
-									<td class="product-price">$85</td>
-									<td class="product-quantity"><input type="number" placeholder="0"/></td>
-									<td class="product-total">1</td>
-								</tr>
-								<tr class="table-body-row">
-									<td class="product-remove"><a href="#"><i class="far fa-window-close"></i></a></td>
-									<td class="product-image"><img src="assets/img/products/product-img-2.jpg" alt=""/></td>
-									<td class="product-name">Berry</td>
-									<td class="product-price">$70</td>
-									<td class="product-quantity"><input type="number" placeholder="0"/></td>
-									<td class="product-total">1</td>
-								</tr>
-								<tr class="table-body-row">
-									<td class="product-remove"><a href="#"><i class="far fa-window-close"></i></a></td>
-									<td class="product-image"><img src="assets/img/products/product-img-3.jpg" alt=""/></td>
-									<td class="product-name">Lemon</td>
-									<td class="product-price">$35</td>
-									<td class="product-quantity"><input type="number" placeholder="0"/></td>
-									<td class="product-total">1</td>
-								</tr>
-							</tbody>
+							{items.map((item, index) => {
+								return (
+                  <tbody class="cart-table-body">
+                    <tr class="table-body-row">
+                      <td class="product-remove">
+                        <button onClick={() => removeItem(item.id)}>
+                          <i class="far fa-window-close"></i>
+                        </button>
+                      </td>
+                      <td class="product-image">
+                        <img
+                          src={`${api_url}/images/${item.image_url}`}
+                          alt=""
+                        />
+                      </td>
+                      <td class="product-name">{item.name}</td>
+                      <td class="product-price">${item.price}</td>
+                      <td class="product-quantity">
+                        {" "}
+                        <button
+                          className=""
+                          onClick={() =>
+                            updateItemQuantity(item.id, item.quantity - 1)
+                          }
+                        >
+                          <FaMinusCircle />
+                        </button>{" "}
+                        <span className=" text-lg">{item.quantity}</span>{" "}
+                        <button onClick={() => updateItemQuantity(item.id, item.quantity + 1)}>
+                          <FaPlusCircle />{" "}
+                        </button>
+                      </td>
+
+                      <td class="product-total">
+                        ${item.price * item.quantity}
+                      </td>
+                    </tr>
+                  </tbody>
+                );
+							})}
 						</table>
 					</div>
 				</div>
@@ -60,17 +86,17 @@ const ProductDetail = () => {
 								</tr>
 							</thead>
 							<tbody>
-								<tr class="total-data">
+								{/* <tr class="total-data">
 									<td><strong>Subtotal: </strong></td>
-									<td>$500</td>
-								</tr>
-								<tr class="total-data">
+									<td>{totalUniqueItems}</td>
+								</tr> */}
+								{/* <tr class="total-data">
 									<td><strong>Shipping: </strong></td>
 									<td>$45</td>
-								</tr>
+								</tr> */}
 								<tr class="total-data">
 									<td><strong>Total: </strong></td>
-									<td>$545</td>
+									<td>ETB {total}</td>
 								</tr>
 							</tbody>
 						</table>
