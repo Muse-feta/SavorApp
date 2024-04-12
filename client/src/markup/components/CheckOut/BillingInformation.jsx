@@ -1,11 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { RiLockPasswordFill } from "react-icons/ri";
 import { FaUserEdit } from "react-icons/fa";
 import { FaBlenderPhone } from "react-icons/fa";
 import { PiAddressBookBold } from "react-icons/pi";
+import { CartProvider, useCart } from "react-use-cart";
+import { FcCurrencyExchange } from "react-icons/fc";
 import { Link } from "react-router-dom";
 
 const BillingInformation = () => {
+    const { isEmpty, totalUniqueItems, items, updateItemQuantity, removeItem } =
+      useCart();
+      const total = items.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      );
+
+      const [onlineOpen, setOnlineOpen] = useState(false);
+      const [manualOpen, setManualOpen] = useState(false);
   return (
     <div>
       <div class="checkout-section mt-150 mb-150">
@@ -17,143 +28,145 @@ const BillingInformation = () => {
                   <div class="card single-accordion">
                     <div class="card-header" id="headingOne">
                       <h5 class="mb-0">
-                        <button
-                          class="btn btn-link"
-                          aria-expanded="true"
-                          aria-controls="collapseOne"
-                        >
-                          Billing Address
-                        </button>
+                        <div className="flex">
+                          <button
+                            className=""
+                            onClick={() => {
+                              setManualOpen(!manualOpen), setOnlineOpen(false);
+                            }}
+                          >
+                            Manual Payment
+                          </button>
+                          <button
+                            onClick={() => {
+                              setOnlineOpen(!onlineOpen), setManualOpen(false);
+                            }}
+                          >
+                            Online Payment
+                          </button>
+                        </div>
                       </h5>
                     </div>
 
-                    <div className="md:w-8/12 lg:ml-6 lg:w-[500px] my-5">
-                      <form>
-                        {/* firstname input */}
-                        <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
-                          <div className=" mt-[6px] opacity-[30%] mr-2">
-                            {<FaUserEdit />}
-                          </div>
-
-                          <input
-                            className="outline-none  bg-[#f7f7f7] "
-                            type="text"
-                            name="firstname"
-                            placeholder="First Name"
-                            // value={form.username}
-                            // onChange={handleChange}
-                          />
-                        </div>
-                        {/* lastname input */}
-                        <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
-                          <div className=" mt-[6px] opacity-[30%] mr-2">
-                            {<FaUserEdit />}
-                          </div>
-
-                          <input
-                            className="outline-none  bg-[#f7f7f7] "
-                            type="text"
-                            name="lastname"
-                            placeholder="Last Name"
-                            // value={form.username}
-                            // onChange={handleChange}
-                          />
-                        </div>
-                        {/* <!-- Email input --> */}
-                        <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
-                          <div className=" mt-[6px] opacity-[30%] mr-2">
-                            {<FaBlenderPhone />}
-                          </div>
-
-                          <input
-                            className="outline-none  bg-[#f7f7f7] "
-                            type="text"
-                            name="phone_number"
-                            placeholder="Phone Number"
-                            // value={form.username}
-                            // onChange={handleChange}
-                          />
-                        </div>
-                        {/* <!--Password input--> */}
-                        <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
-                          <div className=" mt-[6px] opacity-[30%] mr-2">
-                            {<PiAddressBookBold />}
-                          </div>
-                          <input
-                            className="outline-none  bg-[#f7f7f7]"
-                            type="text"
-                            name="adress"
-                            placeholder="Adress"
-                            //   value={form.password}
-                            //   onChange={handleChange}
-                          />
-                        </div>
-                        {/* Hello, how about our team meeting */}
-
-                        {/* <!-- Remember me checkbox --> */}
-                        {/* <!-- Submit button --> */}
-                        {/* <TERipple rippleColor="light" className="w-full"> */}
-                        <button
-                          type="submit"
-                          className="inline-block w-full rounded bg-[#f4a53e] px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-                        >
-                          Place Order
-                        </button>
-                        {/* </TERipple> */}
-                        {/* <!-- Divider --> */}
-
-                        {/* <!-- Social login buttons --> */}
-                        {/* <TERipple rippleColor="light" className="w-full"> */}
-
-                        {/* </TERipple> */}
-                      </form>
-                    </div>
-                    {/* <div>
-                      <div class="card-body">
-                        <div class="billing-address-form">
-                          <form action="index.html" className="">
-                            <p>
-                              <input
-                                className=" mb-3"
-                                type="text"
-                                placeholder="Name"
-                              />
-                            </p>
-                            <p>
-                              <input
-                                className=" mb-3"
-                                type="email"
-                                placeholder="Email"
-                              />
-                            </p>
-                            <p>
-                              <input
-                                className=" mb-3"
-                                type="text"
-                                placeholder="Address"
-                              />
-                            </p>
-                            <p>
-                              <input
-                                className=" mb-3"
-                                type="tel"
-                                placeholder="Phone"
-                              />
-                            </p>
-                            <p>
-                              <textarea
-                                className=" mb-3"
-                                name="bill"
-                                id="bill"
-                                cols="30"
-                                rows="10"
-                                placeholder="Say Something"
-                              ></textarea>
-                            </p>
-                          </form>
-                        </div>
+                    {!onlineOpen && !manualOpen && (
+                      <div
+                        className="   text-center bg-green-100 border  px-4 py-3 rounded relative mt-2"
+                        role="alert"
+                      >
+                        <p className="border-green-400 text-green-700 text-lg">
+                          Welcome to the checkout! To complete your order,
+                          please select your preferred payment method.
+                        </p>
                       </div>
-                    </div> */}
+                    )}
+
+                    {manualOpen && (
+                      <div className="md:w-8/12 lg:ml-6 lg:w-[500px] my-5">
+                        <form>
+                          <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
+                            <div className=" mt-[6px] opacity-[30%] mr-2 ">
+                              {<FcCurrencyExchange />}
+                            </div>
+
+                            <select
+                              className="outline-none  bg-[#f7f7f7] md:w-[480px]"
+                              // onChange={handleChange}
+                              // value={employeeData.company_role_id}
+                              name="company_role_id"
+                            >
+                              <option value={1}>ETB</option>
+                              <option value={2}>Dollar</option>
+                              <option value={3}>Euro</option>
+                              <option value={3}>Pound</option>
+                              <option value={3}>Yen</option>
+                            </select>
+                          </div>
+
+                          <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
+                            <div className=" mt-[6px] opacity-[30%] mr-2">
+                              {<FaBlenderPhone />}
+                            </div>
+
+                            <input
+                              className="outline-none  bg-[#f7f7f7] "
+                              type="text"
+                              name="phone_number"
+                              placeholder="Phone Number"
+                              // value={form.username}
+                              // onChange={handleChange}
+                            />
+                          </div>
+
+                          <button
+                            type="submit"
+                            className="inline-block w-full rounded bg-[#f4a53e] px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                          >
+                            Place Order
+                          </button>
+                        </form>
+                      </div>
+                    )}
+
+                    {onlineOpen && (
+                      <div className="md:w-8/12 lg:ml-6 lg:w-[500px] my-5">
+                        <form>
+                          <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
+                            <div className=" mt-[6px] opacity-[30%] mr-2 ">
+                              {<FcCurrencyExchange />}
+                            </div>
+
+                            <select
+                              className="outline-none  bg-[#f7f7f7] md:w-[480px]"
+                              // onChange={handleChange}
+                              // value={employeeData.company_role_id}
+                              name="company_role_id"
+                            >
+                              <option value={1}>ETB</option>
+                              <option value={2}>Dollar</option>
+                              <option value={3}>Euro</option>
+                              <option value={3}>Pound</option>
+                              <option value={3}>Yen</option>
+                            </select>
+                          </div>
+
+                          <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
+                            <div className=" mt-[6px] opacity-[30%] mr-2">
+                              {<FaBlenderPhone />}
+                            </div>
+
+                            <input
+                              className="outline-none  bg-[#f7f7f7] "
+                              type="text"
+                              name="phone_number"
+                              placeholder="Phone Number"
+                              // value={form.username}
+                              // onChange={handleChange}
+                            />
+                          </div>
+                          <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
+                            <div className=" mt-[6px] opacity-[30%] mr-2">
+                              {<FaBlenderPhone />}
+                            </div>
+
+                            <input
+                              className="outline-none  bg-[#f7f7f7] "
+                              type="text"
+                              name="phone_number"
+                              placeholder="Phone Number"
+                              // value={form.username}
+                              // onChange={handleChange}
+                            />
+                          </div>
+
+                          <button
+                            type="submit"
+                            className="inline-block w-full rounded bg-[#f4a53e] px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                          >
+                            Place Order
+                          </button>
+                        </form>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -165,42 +178,33 @@ const BillingInformation = () => {
                   <thead>
                     <tr>
                       <th>Your order Details</th>
+                      {/* <th>Quantity</th> */}
                       <th>Price</th>
                     </tr>
                   </thead>
-                  <tbody class="order-details-body">
-                    <tr>
-                      <td>Product</td>
-                      <td>Total</td>
-                    </tr>
-                    <tr>
-                      <td>Strawberry</td>
-                      <td>$85.00</td>
-                    </tr>
-                    <tr>
-                      <td>Berry</td>
-                      <td>$70.00</td>
-                    </tr>
-                    <tr>
-                      <td>Lemon</td>
-                      <td>$35.00</td>
-                    </tr>
-                  </tbody>
-                  <tbody class="checkout-details">
-                    <tr>
-                      <td>Subtotal</td>
-                      <td>$190</td>
-                    </tr>
-                    <tr>
-                      <td>Shipping</td>
-                      <td>$50</td>
-                    </tr>
+                  <tbody>
+                    {items.map((item, index) => {
+                      return (
+                        <tr>
+                          <td>{item.name}</td>
+                          {/* <td>{item.quantity}</td> */}
+                          <td>{item.itemTotal}</td>
+                        </tr>
+                      );
+                    })}
                     <tr>
                       <td>Total</td>
-                      <td>$240</td>
+                      {/* <td>-</td> */}
+                      <td>{total}</td>
                     </tr>
                   </tbody>
                 </table>
+                <div class="cart-buttons">
+                  {/* <a href="cart.html" class="boxed-btn">Update Cart</a> */}
+                  <Link to="/cart" class="boxed-btn black">
+                    Check Cart
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

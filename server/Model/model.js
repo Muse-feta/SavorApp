@@ -40,8 +40,11 @@ const Menu_Items = `CREATE TABLE IF NOT EXISTS Menu_Items (
 const Orders = `CREATE TABLE IF NOT EXISTS Orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
+    payment_method VARCHAR(50),
+    phone VARCHAR(20),
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    total_price DECIMAL(10, 2),
+    order_total_price DECIMAL(10, 2),
+    order_status VARCHAR(50),
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 )`;
 
@@ -51,7 +54,7 @@ const Order_Items = `CREATE TABLE IF NOT EXISTS Order_Items (
     order_id INT,
     item_id INT,
     quantity INT,
-    item_price DECIMAL(10, 2),
+    total_item_price DECIMAL(10, 2),
     FOREIGN KEY (order_id) REFERENCES Orders(order_id),
     FOREIGN KEY (item_id) REFERENCES Menu_Items(item_id)
 )`;
