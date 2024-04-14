@@ -30,6 +30,7 @@ import AddMenuItems from './markup/pages/Admin/AddMenuItems';
 import MenuItems from './markup/pages/MenuItems';
 import EditMenu from './markup/pages/Admin/EditMenu';
 import EmptyCart from './markup/pages/EmptyCart';
+import OrderStatus from './markup/pages/OrderStatus';
 
 
 
@@ -55,6 +56,7 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/empty-cart" element={<EmptyCart />} />
           <Route path="/check-out" element={<CheckOut />} />
+          <Route path="/order-status" element={<OrderStatus/>} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPass />} />

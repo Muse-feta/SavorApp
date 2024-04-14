@@ -1,22 +1,193 @@
-import React, { useState } from 'react'
-import { RiLockPasswordFill } from "react-icons/ri";
-import { FaUserEdit } from "react-icons/fa";
+import React, { useEffect, useState } from 'react'
 import { FaBlenderPhone } from "react-icons/fa";
-import { PiAddressBookBold } from "react-icons/pi";
-import { CartProvider, useCart } from "react-use-cart";
+import { useCart } from "react-use-cart";
 import { FcCurrencyExchange } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import checkoutService from '../../../services/checkout.service';
+import { toast, Bounce } from "react-toastify";
+
 
 const BillingInformation = () => {
-    const { isEmpty, totalUniqueItems, items, updateItemQuantity, removeItem } =
-      useCart();
-      const total = items.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0
-      );
+  // const id = useSelector((state) => state.auth.user.id);
+  const [buttonText, setButtonText] = useState("Place Order");
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const isLogin = useSelector((state) => state.auth.isLogin);
+  const {firstname, lastname, id} = useSelector((state) => state.auth.user);
+  const navigate = useNavigate();
+  const tx_ref = `${firstname}-${Date.now()}`;
+  const { isEmpty, totalUniqueItems, items, updateItemQuantity, removeItem } =
+    useCart();
+  const total = items.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
+  // console.log(items);
+  const Order_Items = items.map((item, index) => {
+    return {
+      item_id: item.item_id,
+      quantity: item.quantity,
+      total_item_price: item.itemTotal,
+    };
+  });
+    // console.log(Order_Items);
+  // const [payementMethod, setPayementMethod] = useState("Manual");
+  // console.log(payementMethod);
+  const [checkOutData, setCheckOutData] = useState({
+    user_id: id,
+    payment_method: "Manual",
+    phone: "",
+    order_total_price: total,
+    currency: "ETB",
+    order_status: "Pending",
+    Order_Items: Order_Items,
+    tx_ref: tx_ref,
+    first_name: firstname,
+    last_name: lastname,
+  });
 
-      const [onlineOpen, setOnlineOpen] = useState(false);
-      const [manualOpen, setManualOpen] = useState(false);
+  useEffect(() => {
+    setButtonText("Place Order");
+    setButtonDisabled(false);
+  },[])
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let valid = true;
+     if (!checkOutData.payment_method) {
+       toast.error("Payement method is required", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+         theme: "light",
+         transition: Bounce,
+       });
+       valid = false;
+     }
+     if (!checkOutData.phone) {
+       toast.error("Phone number is required", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+         theme: "light",
+         transition: Bounce,
+       });
+       valid = false;
+     }
+     if (!valid) {
+       return;
+     }
+
+     try {
+       if(checkOutData.payment_method === "Manual"){
+        const response = await checkoutService.checkOut(checkOutData);
+        setButtonDisabled(true);
+        console.log(response);
+        // Clear cart after successful checkout
+    if (response.success === true) {
+      items.forEach((item) => removeItem(item.id));
+      setCheckOutData({
+        ...checkOutData,
+        payment_method: "Manual",
+        phone: "",
+        order_total_price: 0,
+        currency: "ETB",
+        order_status: "Pending",
+        Order_Items: [],
+      });
+      navigate("/order-status");
+    }
+
+        if (response.success === true) {
+          toast.success(response.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
+        } else {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
+        }
+       }else if(checkOutData.payment_method === "Online"){
+        setButtonText("Please wait...");
+        setButtonDisabled(true);
+       const response = await checkoutService.onlineCheckOut(checkOutData);
+       // Clear cart after successful checkout
+
+    
+        if(response.success === true){
+           items.forEach((item) => removeItem(item.id));
+           setCheckOutData({
+             ...checkOutData,
+             payment_method: "Manual",
+             phone: "",
+             order_total_price: 0,
+             currency: "ETB",
+             order_status: "Pending",
+             Order_Items: [],
+           });
+        }
+       
+        window.location.href = response.data.data.checkout_url;
+        //  window.location.reload();
+         
+         //  if (response.success === true) {
+      //    toast.success(response.message, {
+      //      position: "top-center",
+      //      autoClose: 5000,
+      //      hideProgressBar: false,
+      //      closeOnClick: true,
+      //      pauseOnHover: true,
+      //      draggable: true,
+      //      progress: undefined,
+      //      theme: "light",
+      //      transition: Bounce,
+      //    });
+      //  } else {
+      //    toast.error(response.message, {
+      //      position: "top-center",
+      //      autoClose: 5000,
+      //      hideProgressBar: false,
+      //      closeOnClick: true,
+      //      pauseOnHover: true,
+      //      draggable: true,
+      //      progress: undefined,
+      //      theme: "light",
+      //      transition: Bounce,
+      //    });
+      //  }
+       }
+     } catch (error) {
+      console.log(error);
+     }
+  };
+
+
+
+     
   return (
     <div>
       <div class="checkout-section mt-150 mb-150">
@@ -29,144 +200,72 @@ const BillingInformation = () => {
                     <div class="card-header" id="headingOne">
                       <h5 class="mb-0">
                         <div className="flex">
-                          <button
-                            className=""
-                            onClick={() => {
-                              setManualOpen(!manualOpen), setOnlineOpen(false);
-                            }}
-                          >
-                            Manual Payment
-                          </button>
-                          <button
-                            onClick={() => {
-                              setOnlineOpen(!onlineOpen), setManualOpen(false);
-                            }}
-                          >
-                            Online Payment
-                          </button>
+                          <button className="">Payement Information</button>
                         </div>
                       </h5>
                     </div>
 
-                    {!onlineOpen && !manualOpen && (
-                      <div
-                        className="   text-center bg-green-100 border  px-4 py-3 rounded relative mt-2"
-                        role="alert"
-                      >
-                        <p className="border-green-400 text-green-700 text-lg">
-                          Welcome to the checkout! To complete your order,
-                          please select your preferred payment method.
-                        </p>
-                      </div>
-                    )}
-
-                    {manualOpen && (
-                      <div className="md:w-8/12 lg:ml-6 lg:w-[500px] my-5">
-                        <form>
-                          <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
-                            <div className=" mt-[6px] opacity-[30%] mr-2 ">
-                              {<FcCurrencyExchange />}
-                            </div>
-
-                            <select
-                              className="outline-none  bg-[#f7f7f7] md:w-[480px]"
-                              // onChange={handleChange}
-                              // value={employeeData.company_role_id}
-                              name="company_role_id"
-                            >
-                              <option value={1}>ETB</option>
-                              <option value={2}>Dollar</option>
-                              <option value={3}>Euro</option>
-                              <option value={3}>Pound</option>
-                              <option value={3}>Yen</option>
-                            </select>
+                    <div className="md:w-8/12 lg:ml-6 lg:w-[500px] my-5">
+                      {checkOutData.payment_method === "Manual" ? (
+                        <h1 className="font-extrabold text-xl text-center mb-2">
+                          Manual <span className="text-[#f4a53e]">Payment</span>
+                        </h1>
+                      ) : (
+                        <h1 className="font-extrabold text-xl text-center mb-2">
+                          Online <span className="text-[#f4a53e]">Payment</span>
+                        </h1>
+                      )}
+                      <form onSubmit={handleSubmit}>
+                        <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
+                          <div className=" mt-[6px] opacity-[30%] mr-2 ">
+                            {<FcCurrencyExchange />}
                           </div>
 
-                          <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
-                            <div className=" mt-[6px] opacity-[30%] mr-2">
-                              {<FaBlenderPhone />}
-                            </div>
-
-                            <input
-                              className="outline-none  bg-[#f7f7f7] "
-                              type="text"
-                              name="phone_number"
-                              placeholder="Phone Number"
-                              // value={form.username}
-                              // onChange={handleChange}
-                            />
-                          </div>
-
-                          <button
-                            type="submit"
-                            className="inline-block w-full rounded bg-[#f4a53e] px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                          <select
+                            className="outline-none  bg-[#f7f7f7] w-[280px] md:w-[480px]"
+                            onChange={(e) =>
+                              setCheckOutData({
+                                ...checkOutData,
+                                payment_method: e.target.value,
+                              })
+                            }
+                            value={checkOutData.payment_method}
+                            name="payment_method"
                           >
-                            Place Order
-                          </button>
-                        </form>
-                      </div>
-                    )}
+                            <option value="Manual">Pay Manualy</option>
+                            <option value="Online">Pay Online</option>
+                          </select>
+                        </div>
 
-                    {onlineOpen && (
-                      <div className="md:w-8/12 lg:ml-6 lg:w-[500px] my-5">
-                        <form>
-                          <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
-                            <div className=" mt-[6px] opacity-[30%] mr-2 ">
-                              {<FcCurrencyExchange />}
-                            </div>
-
-                            <select
-                              className="outline-none  bg-[#f7f7f7] md:w-[480px]"
-                              // onChange={handleChange}
-                              // value={employeeData.company_role_id}
-                              name="company_role_id"
-                            >
-                              <option value={1}>ETB</option>
-                              <option value={2}>Dollar</option>
-                              <option value={3}>Euro</option>
-                              <option value={3}>Pound</option>
-                              <option value={3}>Yen</option>
-                            </select>
+                        <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
+                          <div className=" mt-[6px] opacity-[30%] mr-2">
+                            {<FaBlenderPhone />}
                           </div>
 
-                          <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
-                            <div className=" mt-[6px] opacity-[30%] mr-2">
-                              {<FaBlenderPhone />}
-                            </div>
+                          <input
+                            className="outline-none  bg-[#f7f7f7] "
+                            type="text"
+                            name="phone"
+                            placeholder="Phone Number"
+                            value={checkOutData.phone}
+                            onChange={(e) => {
+                              setCheckOutData({
+                                ...checkOutData,
+                                phone: e.target.value,
+                              });
+                            }}
+                          />
+                        </div>
 
-                            <input
-                              className="outline-none  bg-[#f7f7f7] "
-                              type="text"
-                              name="phone_number"
-                              placeholder="Phone Number"
-                              // value={form.username}
-                              // onChange={handleChange}
-                            />
-                          </div>
-                          <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
-                            <div className=" mt-[6px] opacity-[30%] mr-2">
-                              {<FaBlenderPhone />}
-                            </div>
-
-                            <input
-                              className="outline-none  bg-[#f7f7f7] "
-                              type="text"
-                              name="phone_number"
-                              placeholder="Phone Number"
-                              // value={form.username}
-                              // onChange={handleChange}
-                            />
-                          </div>
-
-                          <button
-                            type="submit"
-                            className="inline-block w-full rounded bg-[#f4a53e] px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-                          >
-                            Place Order
-                          </button>
-                        </form>
-                      </div>
-                    )}
+                        <button
+                          type="submit"
+                          disabled={buttonDisabled}
+                          className="inline-block w-full rounded bg-[#f4a53e] px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                        >
+                          {buttonText}
+                        </button>
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>

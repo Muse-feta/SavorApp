@@ -14,7 +14,7 @@ const register = async (req, res) => {
    try {
      const user = await userService.createUser(req.body);
      const payload = {
-         id: user._id,
+         id: user.user_id,
          email: user.email,
          username: user.username,
          role: user.role,

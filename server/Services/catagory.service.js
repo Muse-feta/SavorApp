@@ -18,7 +18,7 @@ const getFiles = async () => {
   try {
     const query = `SELECT * FROM Categories`;
     const rows = await pool.query(query);
-    console.log(rows[0]);
+    // console.log(rows[0]);
     return rows[0];
   }catch{
     console.log(error);

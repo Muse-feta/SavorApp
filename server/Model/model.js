@@ -44,6 +44,7 @@ const Orders = `CREATE TABLE IF NOT EXISTS Orders (
     phone VARCHAR(20),
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     order_total_price DECIMAL(10, 2),
+    currency VARCHAR(10),
     order_status VARCHAR(50),
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 )`;
@@ -64,8 +65,10 @@ const Online_Payments = `CREATE TABLE IF NOT EXISTS Online_Payments (
     payment_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT,
     amount DECIMAL(10, 2),
+    currency VARCHAR(10),
     payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    transaction_id VARCHAR(100), 
+    transaction_id VARCHAR(100),
+    payment_status VARCHAR(100), 
     FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 )`;
 

@@ -15,14 +15,14 @@ const login = async (req, res) => {
         }
 
         const payload = {
-            id: user.data.id,
-            email: user.data.email,
-            username: user.data.username,
-            role: user.data.role,
-            address: user.data.address,
-            firstname: user.data.firstname,
-            lastname: user.data.lastname
-        }
+          id: user.data.user_id,
+          email: user.data.email,
+          username: user.data.username,
+          role: user.data.role,
+          address: user.data.address,
+          firstname: user.data.firstname,
+          lastname: user.data.lastname,
+        };
         const token = await jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '3d'});
 
         return res.status(200).json({
