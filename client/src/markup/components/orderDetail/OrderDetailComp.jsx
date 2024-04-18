@@ -1,34 +1,40 @@
 import React, { useEffect, useState } from 'react'
 import orderServices from '../../../services/order.service'
+import { format } from "date-fns";
+
+import banner from "../../../assets/img/frenchnobg.png";
+import { Link } from 'react-router-dom';
 
 const OrderDetailComp = () => {
     const id = window.location.pathname.split("/")[2]
     const [transactionId, setTransactionId] = useState(null)
     const [onlinePayementStatus, setOnlinePayementStatus] = useState(null)
-    console.log(onlinePayementStatus)
-    console.log(transactionId)
+    const [updatedOrderDetail, setUpdatedOrderDetail] = useState(null)
+    // console.log(onlinePayementStatus)
+    // console.log(transactionId)
+    console.log(updatedOrderDetail)
+
+    // get active order detail
         useEffect(() => {
             const res = orderServices.getActiveOrderDetail(id).then((res) => {
-                console.log(res.data)
+                // console.log(res.data)
                 if (res.data[0].transaction_id) {
                   setTransactionId(res.data[0].transaction_id);
                 }
             }).catch((err) => {
                 console.log(err)
             })
-
-            
-
             
         },[])
-
+       
+        // verify transaction
         useEffect(() => {
             
             if (transactionId) {
               const res = orderServices
                 .verifyTransaction(transactionId)
                 .then((res) => {
-                  console.log(res.data.data);
+                  // console.log(res.data.data);
                   setOnlinePayementStatus(res.data.data.status);
                 })
                 .catch((err) => {
@@ -39,6 +45,7 @@ const OrderDetailComp = () => {
           
         },[transactionId])
 
+        // updated payement status
         useEffect(() => {
             if (onlinePayementStatus) {
               const data = {
@@ -47,20 +54,21 @@ const OrderDetailComp = () => {
               const res = orderServices
                 .updateTransactionStatus(id, data)
                 .then((res) => {
-                  console.log(res);
+                  // console.log(res);
                 })
                 .catch((err) => {
                   console.log(err);
                 });
             }
         })
-
+      // updated orders
         useEffect(() => {
          setTimeout(() => {
            const res = orderServices
              .getUpdatedActiveOrders(id)
              .then((res) => {
-               console.log(res.data);
+              //  console.log(res.data);
+               setUpdatedOrderDetail(res.data);
              })
              .catch((err) => {
                console.log(err);
@@ -69,39 +77,126 @@ const OrderDetailComp = () => {
         },[ onlinePayementStatus])
   return (
     <div>
-        <div class="checkout-section mt-150 mb-150">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8">
-					<div class="checkout-accordion-wrap">
-						<div class="accordion" id="accordionExample">
-						  <div class="card single-accordion">
-						    <div class="card-header" id="headingOne">
-						      <h5 class="mb-0">
-						        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-						          Order Summary
-						        </button>
-						      </h5>
-						    </div>
+      <div class="checkout-section mt-5 mb-150">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="checkout-accordion-wrap">
+                <div class="accordion" id="accordionExample">
+                  <div class="card single-accordion">
+                    <div class="card-header" id="headingOne">
+                      <h5 class="mb-0">
+                        <button
+                          class="btn btn-link"
+                          type="button"
+                          data-toggle="collapse"
+                          data-target="#collapseOne"
+                          aria-expanded="true"
+                          aria-controls="collapseOne"
+                        >
+                          Active Order Summary
+                        </button>
+                      </h5>
+                    </div>
 
-						    <div >
-						      <div class="">
-						        <h1 class="text-black">Hello</h1>
-						      </div>
-						    </div>
-						  </div>
-						 
-						</div>
+                    <div>
+                      <div class="fle justify-center items-center m-5">
+                        {!updatedOrderDetail && <p>Loading...</p>}
+                        {updatedOrderDetail && (
+                          <div>
+                            <h1>
+                              <span className="font-bold">Order Items: </span>{" "}
+                              <span>
+                                {updatedOrderDetail.map(
+                                  (item) => item.name + " "
+                                )}
+                              </span>
+                            </h1>
+                            <h1>
+                              <span className="font-bold">Phone Number: </span>{" "}
+                              <span>{updatedOrderDetail[0].phone}</span>
+                            </h1>
+                            <h1>
+                              <span className="font-bold">Total Price: </span>{" "}
+                              <span>
+                                {updatedOrderDetail[0].order_total_price}
+                              </span>
+                            </h1>
+                            <h1>
+                              <span className="font-bold">
+                                Payment Method:{" "}
+                              </span>{" "}
+                              <span>
+                                {updatedOrderDetail[0].payment_method}
+                              </span>
+                            </h1>
 
-					</div>
-				</div>
+                            {updatedOrderDetail[0].payment_method ===
+                            "Online" ? (
+                              <h1>
+                                <span className="font-bold">
+                                  Payement Status:{" "}
+                                </span>
+                                <span>
+                                  {updatedOrderDetail[0].payment_status ===
+                                  "success"
+                                    ? "Paid"
+                                    : "Unpaid"}
+                                </span>
+                              </h1>
+                            ) : (
+                              <h1>
+                                <span className="font-bold">
+                                  Payement Status:{" "}
+                                </span>{" "}
+                                <span>Unpaid</span>
+                              </h1>
+                            )}
+                            {updatedOrderDetail[0].payment_method ===
+                              "Online" && (
+                              <h1>
+                                <span className="font-bold">
+                                  Transaction Id:{" "}
+                                </span>
+                                <span>
+                                  {updatedOrderDetail[0].transaction_id}
+                                </span>
+                              </h1>
+                            )}
+                            <h1>
+                              <span className="font-bold">Order Date: </span>
+                              <span>
+                                {" "}
+                                {format(
+                                  new Date(updatedOrderDetail[0].order_date),
+                                  "MM/dd/yyyy"
+                                )}
+                              </span>
+                            </h1>
 
-				
-			</div>
-		</div>
-	</div>
+                            <h1>
+                              <span className="font-bold">Order Status: </span>
+                              <span>{updatedOrderDetail[0].order_status}</span>
+                            </h1>
+                            <Link
+                              to={"/order-status"}
+                              className=" text-center inline-block w-full rounded bg-[#f4a53e] px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                            >
+                              Back
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
 export default OrderDetailComp
