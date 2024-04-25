@@ -34,7 +34,7 @@ const Header = () => {
    }, []);
 	
   return (
-    <div className="sticky top-0 z-10 ">
+    <div className="sticky top-0 z-10">
       <div
         class={`top-header-area ${show ? " bg-[#051922] h-[90px]" : null}`}
         id="sticker"

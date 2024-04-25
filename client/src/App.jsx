@@ -32,6 +32,7 @@ import EditMenu from './markup/pages/Admin/EditMenu';
 import EmptyCart from './markup/pages/EmptyCart';
 import OrderStatus from './markup/pages/OrderStatus';
 import OrderDetail from './markup/pages/OrderDetail';
+import Orders from './markup/pages/Admin/Orders';
 
 
 
@@ -102,6 +103,14 @@ const App = () => {
             element={
               <PrivateAuthRoute roles={["admin"]}>
                 <EditMenu />
+              </PrivateAuthRoute>
+            }
+          />
+          <Route
+            path="/admin/orders"
+            element={
+              <PrivateAuthRoute roles={["admin"]}>
+                <Orders/>
               </PrivateAuthRoute>
             }
           />

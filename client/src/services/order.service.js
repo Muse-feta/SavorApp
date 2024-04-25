@@ -13,6 +13,17 @@ const getActiveOrders = async (id) => {
     }
 };
 
+const getAllActiveOrders = async () => {
+    try {
+        const response = await axios.get(
+          `${api_url}/api/get-all-active-orders`
+        );
+        return response.data;
+    } catch (error) {
+        return error.response.data;
+    }
+};
+
 const getActiveOrderDetail = async (order_id) => {
     try {
         const response = await axios.get(
@@ -58,6 +69,7 @@ const getUpdatedActiveOrders = async (order_id) => {
 
 const orderServices = {
     getActiveOrders,
+    getAllActiveOrders,
     getActiveOrderDetail,
     verifyTransaction,
     updateTransactionStatus,

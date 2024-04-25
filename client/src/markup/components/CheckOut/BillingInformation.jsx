@@ -91,6 +91,7 @@ const BillingInformation = () => {
         const response = await checkoutService.checkOut(checkOutData);
         setButtonDisabled(true);
         console.log(response);
+        navigate("/order-status");
         // Clear cart after successful checkout
     if (response.success === true) {
       items.forEach((item) => removeItem(item.id));

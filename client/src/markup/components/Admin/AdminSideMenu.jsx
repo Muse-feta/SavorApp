@@ -10,15 +10,11 @@ import { TiThMenu } from "react-icons/ti";
 import { MdBookmarkAdd } from "react-icons/md";
 
 const AdminSideMenu = () => {
+  const [hide, setHide] = useState(true);
 
-  const [hide, setHide] = useState(true)
   return (
-    <div
-      className={`${
-        hide ? " w-[50px] md:w-[100px] " : "w-[300px] z-50"
-      } p-3 text-center border shadow-2xl`}
-    >
-      <div className=" md:m-4">
+    <div className="relative h-screen">
+      <div className="absolute top-0 left-0 md:m-4">
         {hide ? (
           <TiThMenu
             className="text-3xl text-[#f4a53e] cursor-pointer"
@@ -26,95 +22,58 @@ const AdminSideMenu = () => {
           />
         ) : (
           <IoMdCloseCircle
-            className="text-3xl text-[#f4a53e] cursor-pointer"
+            className="text-3xl text-[#f4a53e] cursor-pointer duration-300"
             onClick={() => setHide(!hide)}
           />
         )}
       </div>
 
-      {
-        <div>
-          <Link to="/admin/dashbored">
-            <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
-              <div
-                className={`${
-                  !hide ? " hidden md:block md:text-3xl" : "text-3xl"
-                }`}
-              >
-                <FaTachometerAlt />
-              </div>
-              {hide ? null : <h className=" block">Dashbored</h>}
-            </div>
-          </Link>
+      <div
+        className={`absolute inset-y-0 h-full  w-[250px]  md:w-[350px] bg-white  shadow-md duration-300 ${
+          hide ? "hidden" : " p-30 pl-5 pt-6"
+        }`}
+      >
+        <IoMdCloseCircle
+          className="text-3xl text-[#f4a53e] cursor-pointer duration-300 mb-3"
+          onClick={() => setHide(!hide)}
+        />
+        <Link to="/admin/dashbored" className="">
+          <MenuItem icon={<FaTachometerAlt />} text="Dashboard" />
+        </Link>
 
-          <Link to="/admin/add-catagory">
-            <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
-              <div
-                className={`${
-                  !hide ? " hidden md:block md:text-3xl" : "text-3xl"
-                }`}
-              >
-                <MdBookmarkAdd />
-              </div>
-              {hide ? null : <h className=" block">Add Catagory</h>}
-            </div>
-          </Link>
+        <Link to="/admin/add-catagory">
+          <MenuItem icon={<MdBookmarkAdd />} text="Add Category" />
+        </Link>
 
-          {/* <Link to="/admin/add-menu-items/">
-            <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
-              <div
-                className={`${
-                  !hide ? " hidden md:block md:text-3xl" : "text-3xl"
-                }`}
-              >
-                <FaCalendarPlus />
-              </div>
-              {hide ? null : <h className=" block">Add Item</h>}
-            </div>
-          </Link> */}
+        <Link to="/admin/analytics">
+          <MenuItem icon={<IoMdAnalytics />} text="Analytics" />
+        </Link>
 
-          <Link to="/admin/analytics">
-            <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
-              <div
-                className={`${
-                  !hide ? " hidden md:block md:text-3xl" : "text-3xl"
-                }`}
-              >
-                <IoMdAnalytics />
-              </div>
-              {hide ? null : <h className=" block">Analytics</h>}
-            </div>
-          </Link>
+        <Link to="/admin/orders">
+          <MenuItem icon={<FaShoppingBasket />} text="Orders" />
+        </Link>
 
-          <Link to="/admin/orders">
-            <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
-              <div
-                className={`${
-                  !hide ? " hidden md:block md:text-3xl" : "text-3xl"
-                }`}
-              >
-                <FaShoppingBasket />
-              </div>
-              {hide ? null : <h className=" block ">Orders</h>}
-            </div>
-          </Link>
+        <Link to="/admin/users">
+          <MenuItem icon={<FaUsersCog />} text="Users" />
+        </Link>
+      </div>
 
-          <Link to="/admin/users">
-            <div className=" md:hover:border-l-4 md:border-[#f4a53e] hover:text-[#f4a53e] text-lg font-extrabold hover:bg-[#f9f9f9] py-3 flex gap-3 justify-center border-b-2 mb-2">
-              <div
-                className={`${
-                  !hide ? " hidden md:block md:text-3xl" : "text-3xl"
-                }`}
-              >
-                <FaUsersCog />
-              </div>
-              {hide ? null : <h className=" block">Users</h>}
-            </div>
-          </Link>
-        </div>
-      }
+      <div
+        className={`ml-0 md:ml-52 transition-all duration-300 ${
+          hide ? "" : "ml-0"
+        }`}
+      >
+        {/* Content goes here */}
+      </div>
     </div>
   );
 };
+
+const MenuItem = ({ icon, text }) => (
+  <div className="hover:bg-[#f9f9f9] text-lg font-extrabold py-3 flex gap-3  border-b-2 mb-2">
+    <div className=" text-2xl md:text-3xl">{icon}</div>
+    <h className="block text-[12px] md:text-[17px]">{text}</h>
+  </div>
+);
 
 export default AdminSideMenu;

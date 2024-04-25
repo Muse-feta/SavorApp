@@ -16,6 +16,21 @@ const getOrderById = async (req, res) => {
      }
 }
 
+const getAllActiveOrders = async (req, res) => {
+  const result = await order_service.getAllActiveOrders();
+  if (result) {
+    return res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } else {
+    return res.status(500).json({
+      success: false,
+      message: "No Orders found",
+    });
+  }
+}
+
 const getActiveOrderDetail = async (req, res) => {
   const order_id = req.params.order_id;
   const result = await order_service.getActiveOrderDetail(order_id);
@@ -86,6 +101,7 @@ const order_controller = {
   getActiveOrderDetail,
   verifyTransaction,
   updateTransactionStatus,
-  getUpdatedActiveOrder
+  getUpdatedActiveOrder,
+  getAllActiveOrders,
 };
 module.exports = order_controller

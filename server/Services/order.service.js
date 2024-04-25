@@ -11,6 +11,12 @@ const getOrderById = async (id) => {
     return rows[0];
 };
 
+const getAllActiveOrders = async () => {
+    const query = `SELECT * FROM orders WHERE order_status = ?`;
+    const rows = await pool.query(query, ["pending"]);
+    return rows[0];
+};
+
 const getActiveOrderDetail = async (order_id) => {
 
     // select orders , order_items , online_payments using order_id
@@ -68,9 +74,11 @@ WHERE orders.order_id = ?`;
   return rows[0];
 }
 
+
 const order_service = {
     getOrderById,
     getActiveOrderDetail,
+    getAllActiveOrders,
     verifyTransaction,
     updateTransactionStatus,
     getUpdatedActiveOrder
