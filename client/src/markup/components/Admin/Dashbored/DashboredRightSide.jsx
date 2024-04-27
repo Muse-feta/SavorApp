@@ -2,7 +2,7 @@ import React from 'react'
 
 const DashboredRightSide = () => {
   return (
-    <div className="  p-2 md:p-12">
+    <div className=" p-2 md:p-12">
       <div className=" md:flex  ustify-center items-center gap-5 lg:ml-[100px]">
         <div className=" bg-[#3b76ef] text-center p-[50px] w-[170px] ml-3 md:ml-0   md:w-[300px]  font-extrabold font-mono text-white rounded-2xl my-3 flex justify-center items-center">
           <div>
