@@ -56,142 +56,26 @@ const OrdesComp = () => {
   };
   return (
     <div>
-      <div class="checkout-section mt-150 mb-150">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-8">
-              <div class="checkout-accordion-wrap">
-                <div class="accordion" id="accordionExample">
-                  <div class="card single-accordion">
-                    <div class="card-header" id="headingOne">
-                      <h5 class="mb-0">
-                        <button
-                          class="btn btn-link"
-                          type="button"
-                          data-toggle="collapse"
-                          data-target="#collapseOne"
-                          aria-expanded="true"
-                          aria-controls="collapseOne"
-                        >
-                          Active Orders
-                        </button>
-                      </h5>
-                    </div>
-
-                    <div className="  overflow-y-auto scrollbar-w-2 scrollbar-track-gray-300 scrollbar-thumb-gray-600">
-                      <div class="card-body">
-                        <table class="min-w-full divide-y divide-gray-200">
-                          <thead class="bg-gray-50">
-                            <tr>
-                              <th
-                                scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                Total Price
-                              </th>
-                              <th
-                                scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                Phone
-                              </th>
-
-                              <th
-                                scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                Order Date
-                              </th>
-
-                              <th
-                                scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                Payement Method
-                              </th>
-                              <th
-                                scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                Order Status
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody class="bg-white divide-y divide-gray-200">
-                            {currentOrders.map((order, i) => {
-                              return (
-                                <>
-                                  <tr
-                                    key={i}
-                                    className="hover:bg-[#fafafa]"
-                                    onClick={() => orderDetail(order.order_id)}
-                                  >
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                      {order.order_total_price}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                      {order.phone}
-                                    </td>
-
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                      {format(
-                                        new Date(order.order_date),
-                                        "MM/dd/yyyy"
-                                      )}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                      {order.payment_method}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                      <p className=" bg-[#ffc83c] rounded-md text-center font-bold text-sm text-black px-3">
-                                        {order.order_status}
-                                      </p>
-                                    </td>
-                                  </tr>
-
-                                  {/* Add more rows as needed */}
-                                </>
-                              );
-                            })}
-                          </tbody>
-                        </table>
-                        
-                      </div>
-                    </div>
+      <div className="list-section p-32 ">
+        <div className="">
+          <div className="row">
+            {currentOrders.map((order, index) => (
+              <div
+                className="col-lg-4 col-md-6 m-4 mb-lg-0"
+                key={index}
+                onClick={() => orderDetail(order.order_id)}
+              >
+                <div className="list-box d-flex align-items-center">
+                  <div className="list-icon">
+                    <i className="fas fa-shipping-fast"></i>
                   </div>
-                  <div class="card single-accordion">
-                    <div class="card-header" id="headingTwo">
-                      <h5 class="mb-0">
-                        <button
-                          class="btn btn-link collapsed"
-                          type="button"
-                          data-toggle="collapse"
-                          data-target="#collapseTwo"
-                          aria-expanded="false"
-                          aria-controls="collapseTwo"
-                        >
-                          Completed Orders
-                        </button>
-                      </h5>
-                    </div>
-                    <div
-                      id="collapseTwo"
-                      class="collapse"
-                      aria-labelledby="headingTwo"
-                      data-parent="#accordionExample"
-                    >
-                      <div class="card-body">
-                        <div class="shipping-address-form">
-                          <p>Your shipping address form is here.</p>
-                        </div>
-                      </div>
-                    </div>
+                  <div className="content">
+                    <h3>{order.order_id}</h3>
+                    <p>{order.order_date}</p>
                   </div>
                 </div>
               </div>
-            </div>
-
-          
+            ))}
           </div>
         </div>
       </div>

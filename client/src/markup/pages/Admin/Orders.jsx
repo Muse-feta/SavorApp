@@ -6,10 +6,12 @@ import OrdesComp from '../../components/Admin/Orders/OrdesComp';
 const Orders = () => {
   return (
     <div>
-      <OrdersBanner/>
-      <div className=" flex">
+      <OrdersBanner />
+      <div className="flex">
         <AdminSideMenu />
-        <OrdesComp/>
+        <div>
+          <OrdesComp />
+        </div>
       </div>
     </div>
   );

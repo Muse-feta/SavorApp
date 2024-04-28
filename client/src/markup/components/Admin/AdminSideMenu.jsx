@@ -13,7 +13,7 @@ const AdminSideMenu = () => {
   const [hide, setHide] = useState(true);
 
   return (
-    <div className="relative h-screen">
+    <div className="relative h-screen bg-white">
       <div className="absolute top-0 left-0 md:m-4">
         {hide ? (
           <TiThMenu
