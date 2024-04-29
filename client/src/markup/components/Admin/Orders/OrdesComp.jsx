@@ -55,28 +55,56 @@ const OrdesComp = () => {
     }
   };
   return (
-    <div>
-      <div className="list-section p-32 ">
-        <div className="">
-          <div className="row">
-            {currentOrders.map((order, index) => (
-              <div
-                className="col-lg-4 col-md-6 m-4 mb-lg-0"
-                key={index}
-                onClick={() => orderDetail(order.order_id)}
-              >
-                <div className="list-box d-flex align-items-center">
-                  <div className="list-icon">
-                    <i className="fas fa-shipping-fast"></i>
-                  </div>
-                  <div className="content">
-                    <h3>{order.order_id}</h3>
-                    <p>{order.order_date}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+    <div className="checkout-section mt-[30px] mb-[30px]">
+      <div className="container mx-auto xl:w-3/4 2xl:w-1/2">
+        <h2 className="text-xl font-bold mb-4">Active Orders</h2>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Total Price
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Phone
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Order Date
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Payment Method
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Order Status
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {activeOrders.map((order, index) => (
+                <tr
+                  key={index}
+                  className="hover:bg-[#fafafa] cursor-pointer"
+                  onClick={() => orderDetail(order.order_id)}
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {order.order_total_price}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">{order.phone}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {format(new Date(order.order_date), "MM/dd/yyyy")}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {order.payment_method}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <p className="bg-[#ffc83c] rounded-md text-center font-bold text-sm text-black px-3">
+                      {order.order_status}
+                    </p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

@@ -9,7 +9,10 @@ const Orders = () => {
       <OrdersBanner />
       <div className="flex">
         <AdminSideMenu />
-        <div>
+
+        <div style={{ flex: "1 1 auto", minWidth: "0" }}>
+          {" "}
+          {/* Set min-width to ensure it doesn't shrink */}
           <OrdesComp />
         </div>
       </div>

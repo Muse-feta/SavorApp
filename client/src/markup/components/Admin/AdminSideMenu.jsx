@@ -30,7 +30,7 @@ const AdminSideMenu = () => {
 
       <div
         className={`absolute inset-y-0 h-full  w-[250px]  md:w-[350px] bg-white  shadow-md duration-300 ${
-          hide ? "hidden" : " p-30 pl-5 pt-6"
+          hide ? "hidden" : " p-30 pl-5 pt-6 "
         }`}
       >
         <IoMdCloseCircle
