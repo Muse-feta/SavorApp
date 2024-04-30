@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import orderServices from '../../../services/order.service'
+import { useSelector } from "react-redux";
+import { toast, Bounce } from "react-toastify";
 import { format } from "date-fns";
 
 import banner from "../../../assets/img/frenchnobg.png";
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const OrderDetailComp = () => {
     const id = window.location.pathname.split("/")[2]
+     const user = useSelector((state) => state.auth.user);
+     const navigate = useNavigate();
+    //  console.log(user)
+    
     const [transactionId, setTransactionId] = useState(null)
     const [onlinePayementStatus, setOnlinePayementStatus] = useState(null)
     const [updatedOrderDetail, setUpdatedOrderDetail] = useState(null)
     // console.log(onlinePayementStatus)
     // console.log(transactionId)
-    console.log(updatedOrderDetail)
+    // console.log(updatedOrderDetail)
+
+    let role = null;
+    if (user) {
+      role = user.role;
+    }
+    // console.log(role)
 
     // get active order detail
         useEffect(() => {
@@ -67,7 +79,7 @@ const OrderDetailComp = () => {
            const res = orderServices
              .getUpdatedActiveOrders(id)
              .then((res) => {
-              //  console.log(res.data);
+               console.log(res.data);
                setUpdatedOrderDetail(res.data);
              })
              .catch((err) => {
@@ -75,6 +87,29 @@ const OrderDetailComp = () => {
              });
          }, 2000);
         },[ onlinePayementStatus])
+
+        const handleUpdateOrderStatus = () => {
+          const res = orderServices
+            .updateOrderStatus(id)
+            .then((res) => {
+              // console.log(res.message);
+              toast.success(res.message, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+              });
+              navigate("/admin/orders");
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
   return (
     <div>
       <div class="checkout-section mt-5 mb-150">
@@ -108,7 +143,8 @@ const OrderDetailComp = () => {
                               <span className="font-bold">Order Items: </span>{" "}
                               <span>
                                 {updatedOrderDetail.map(
-                                  (item) => item.name + " "
+                                  (item) =>
+                                    item.name + " " + item.quantity + ", "
                                 )}
                               </span>
                             </h1>
@@ -178,12 +214,21 @@ const OrderDetailComp = () => {
                               <span className="font-bold">Order Status: </span>
                               <span>{updatedOrderDetail[0].order_status}</span>
                             </h1>
-                            <Link
-                              to={"/order-status"}
-                              className=" text-center inline-block w-full rounded bg-[#f4a53e] px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-                            >
-                              Back
-                            </Link>
+                            {role === "admin" ? (
+                              <Link
+                                onClick={handleUpdateOrderStatus}
+                                className=" text-center inline-block w-full rounded bg-[#f4a53e] px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                              >
+                                Complete
+                              </Link>
+                            ) : (
+                              <Link
+                                to={"/order-status"}
+                                className=" text-center inline-block w-full rounded bg-[#f4a53e] px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                              >
+                                Back
+                              </Link>
+                            )}
                           </div>
                         )}
                       </div>

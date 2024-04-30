@@ -74,6 +74,12 @@ WHERE orders.order_id = ?`;
   return rows[0];
 }
 
+const updateOrderStatus = async (order_id) => {
+   const query = `UPDATE orders SET order_status = CASE WHEN order_status = 'pending' THEN 'success' ELSE 'pending' END WHERE order_id = ?`;
+   const rows = await pool.query(query, [order_id]);
+   return rows[0].affectedRows;
+}
+
 
 const order_service = {
     getOrderById,
@@ -81,6 +87,7 @@ const order_service = {
     getAllActiveOrders,
     verifyTransaction,
     updateTransactionStatus,
-    getUpdatedActiveOrder
+    getUpdatedActiveOrder,
+    updateOrderStatus
 }
 module.exports = order_service

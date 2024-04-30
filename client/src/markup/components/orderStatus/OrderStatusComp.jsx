@@ -78,6 +78,12 @@ const OrderStatusComp = () => {
                                 scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                               >
+                                Order ID
+                              </th>
+                              <th
+                                scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                              >
                                 Total Price
                               </th>
                               <th
@@ -116,6 +122,9 @@ const OrderStatusComp = () => {
                                     className="hover:bg-[#fafafa]"
                                     onClick={() => orderDetail(order.order_id)}
                                   >
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                      {order.order_id}
+                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                       {order.order_total_price}
                                     </td>

@@ -95,6 +95,22 @@ const getUpdatedActiveOrder = async (req, res) => {
   }
 }
 
+const updateOrderStatus = async (req, res) => {
+  const order_id = req.params.order_id;
+  const result = await order_service.updateOrderStatus(order_id);
+  if (result) {
+    return res.status(200).json({
+      success: true,
+      message: "Order status updated successfully",
+    });
+  } else {
+    return res.status(500).json({
+      success: false,
+      message: "Order status not updated",
+    });
+  }
+}
+
 
 const order_controller = {
   getOrderById,
@@ -103,5 +119,6 @@ const order_controller = {
   updateTransactionStatus,
   getUpdatedActiveOrder,
   getAllActiveOrders,
+  updateOrderStatus
 };
 module.exports = order_controller

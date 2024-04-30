@@ -67,12 +67,24 @@ const getUpdatedActiveOrders = async (order_id) => {
     }
 };
 
+const updateOrderStatus = async (order_id) => {
+    try {
+        const response = await axios.put(
+          `${api_url}/api/update-order-status/${order_id}`
+        );
+        return response.data;
+    } catch (error) {
+        return error
+    }
+}
+
 const orderServices = {
     getActiveOrders,
     getAllActiveOrders,
     getActiveOrderDetail,
     verifyTransaction,
     updateTransactionStatus,
-    getUpdatedActiveOrders
+    getUpdatedActiveOrders,
+    updateOrderStatus
 };
 export default orderServices
