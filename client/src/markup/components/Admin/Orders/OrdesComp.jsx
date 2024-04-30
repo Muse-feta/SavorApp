@@ -4,11 +4,16 @@ import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { BiSolidDetail } from "react-icons/bi";
 import orderServices from "../../../../services/order.service";
+import { Button, IconButton } from "@material-tailwind/react";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { CircularPagination } from "./CircularPagination";
+ 
 
 const OrdesComp = () => {
   const [activeOrders, setActiveOrders] = useState([]);
   const user = useSelector((state) => state.auth.user);
   const [currentPage, setCurrentPage] = useState(1);
+  // const [active, setActive] = useState(1);
   const [ordersPerPage] = useState(5);
   console.log(user);
   let id = null;
@@ -37,23 +42,13 @@ const OrdesComp = () => {
   }, [id]);
 
   // Pagination
+  // Calculate current page's orders
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = activeOrders.slice(indexOfFirstOrder, indexOfLastOrder);
 
+  // Pagination handler
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const nextPage = () => {
-    if (currentPage < Math.ceil(orders.length / ordersPerPage)) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
   return (
     <div className="checkout-section mt-[30px] mb-[30px]">
       <div className="container mx-auto xl:w-3/4 2xl:w-1/2">
@@ -80,7 +75,7 @@ const OrdesComp = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {activeOrders.map((order, index) => (
+              {currentOrders.map((order, index) => (
                 <tr
                   key={index}
                   className="hover:bg-[#fafafa] cursor-pointer"
@@ -105,6 +100,15 @@ const OrdesComp = () => {
               ))}
             </tbody>
           </table>
+          {/* Pagination */}
+          {/* Pagination */}
+          <div className="flex justify-center mt-4">
+            <CircularPagination
+              active={currentPage}
+              setActive={setCurrentPage}
+              totalPages={Math.ceil(activeOrders.length / ordersPerPage)}
+            />
+          </div>
         </div>
       </div>
     </div>

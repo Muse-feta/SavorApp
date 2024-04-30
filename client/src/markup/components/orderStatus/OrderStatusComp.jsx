@@ -4,35 +4,47 @@ import { useSelector } from 'react-redux';
 import { format } from "date-fns";
 import { useNavigate } from 'react-router-dom';
 import { BiSolidDetail } from "react-icons/bi";
+import { CircularPagination } from '../Admin/Orders/CircularPagination';
 
 const OrderStatusComp = () => {
-	const [activeOrders, setActiveOrders] = useState([]);
-	const user= useSelector((state) => state.auth.user);
+  const [activeOrders, setActiveOrders] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [ordersPerPage] = useState(5);
+  const user = useSelector((state) => state.auth.user);
   console.log(user);
-  let id = null
-  if(user){
-    id = user.id
+  let id = null;
+  if (user) {
+    id = user.id;
   }
   console.log(id);
-	const [order_id, setOrderId] = useState(null);
+  const [order_id, setOrderId] = useState(null);
   const navigate = useNavigate();
-	// console.log(order_id);
+  // console.log(order_id);
 
   const orderDetail = (id) => {
     navigate(`/order-detail/${id}`);
   };
 
-	useEffect(() => {
-		const fetchActiveOrders = async () => {
-      if(id){
+  useEffect(() => {
+    const fetchActiveOrders = async () => {
+      if (id) {
         const data = await orderServices.getActiveOrders(id);
         console.log(data.data);
         setActiveOrders(data.data);
         setOrderId(data.data[0].order_id);
       }
-		}
-		fetchActiveOrders();
-	}, [id])
+    };
+    fetchActiveOrders();
+  }, [id]);
+
+  // Pagination
+  // Calculate current page's orders
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = activeOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  // Pagination handler
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <div>
       <div class="checkout-section mt-150 mb-150">
@@ -62,7 +74,6 @@ const OrderStatusComp = () => {
                         <table class="min-w-full divide-y divide-gray-200">
                           <thead class="bg-gray-50">
                             <tr>
-                             
                               <th
                                 scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -75,14 +86,14 @@ const OrderStatusComp = () => {
                               >
                                 Phone
                               </th>
-                             
+
                               <th
                                 scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                               >
                                 Order Date
                               </th>
-                             
+
                               <th
                                 scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -98,37 +109,53 @@ const OrderStatusComp = () => {
                             </tr>
                           </thead>
                           <tbody class="bg-white divide-y divide-gray-200">
-							{activeOrders.map((order, i) => {
-								return (
-                  <>
-                    <tr
-                      className="hover:bg-[#fafafa]"
-                      onClick={() => orderDetail(order.order_id)}
-                    >
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        {order.order_total_price}
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">{order.phone}</td>
+                            {currentOrders.map((order, i) => {
+                              return (
+                                <>
+                                  <tr
+                                    className="hover:bg-[#fafafa]"
+                                    onClick={() => orderDetail(order.order_id)}
+                                  >
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                      {order.order_total_price}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                      {order.phone}
+                                    </td>
 
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        {format(new Date(order.order_date), "MM/dd/yyyy")}
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        {order.payment_method}
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <p className=" bg-[#ffc83c] rounded-md text-center font-bold text-sm text-black px-3">
-                          {order.order_status}
-                        </p>
-                      </td>
-                    </tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                      {format(
+                                        new Date(order.order_date),
+                                        "MM/dd/yyyy"
+                                      )}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                      {order.payment_method}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                      <p className=" bg-[#ffc83c] rounded-md text-center font-bold text-sm text-black px-3">
+                                        {order.order_status}
+                                      </p>
+                                    </td>
+                                  </tr>
 
-                    {/* Add more rows as needed */}
-                  </>
-                );
-							})}
+                                  {/* Add more rows as needed */}
+                                </>
+                              );
+                            })}
                           </tbody>
                         </table>
+                        {/* Pagination */}
+                        {/* Pagination */}
+                        <div className="flex justify-center mt-4">
+                          <CircularPagination
+                            active={currentPage}
+                            setActive={setCurrentPage}
+                            totalPages={Math.ceil(
+                              activeOrders.length / ordersPerPage
+                            )}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>

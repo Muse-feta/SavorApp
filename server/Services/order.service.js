@@ -12,7 +12,7 @@ const getOrderById = async (id) => {
 };
 
 const getAllActiveOrders = async () => {
-    const query = `SELECT * FROM orders WHERE order_status = ?`;
+    const query = `SELECT * FROM orders WHERE order_status = ? ORDER BY order_id DESC`;
     const rows = await pool.query(query, ["pending"]);
     return rows[0];
 };
