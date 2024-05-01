@@ -12,8 +12,14 @@ const getOrderById = async (id) => {
 };
 
 const getAllActiveOrders = async () => {
-    const query = `SELECT * FROM orders WHERE order_status = ? ORDER BY order_id DESC`;
+    const query = `SELECT * FROM orders INNER JOIN users ON orders.user_id = users.user_id WHERE order_status = ? ORDER BY order_id DESC`;
     const rows = await pool.query(query, ["pending"]);
+    return rows[0];
+};
+
+const getAllCompletedOrders = async () => {
+    const query = `SELECT * FROM orders INNER JOIN users ON orders.user_id = users.user_id WHERE order_status = ? ORDER BY order_id DESC`;
+    const rows = await pool.query(query, ["success"]);
     return rows[0];
 };
 
@@ -24,7 +30,7 @@ const getActiveOrderDetail = async (order_id) => {
 FROM orders 
 INNER JOIN Order_Items ON orders.order_id = Order_Items.order_id 
 INNER JOIN Menu_Items ON Order_Items.item_id = Menu_Items.item_id 
-LEFT JOIN Online_Payments ON orders.order_id = Online_Payments.order_id 
+LEFT JOIN Online_Payments ON orders.order_id = Online_Payments.order_id
 WHERE orders.order_id = ?`;
     const rows = await pool.query(query, [order_id]);
 
@@ -53,7 +59,6 @@ const verifyTransaction = async (transaction_id) => {
       console.log(error.response.headers);
       return error;
     }
-
 };
 
 const updateTransactionStatus = async (order_id, data) => {
@@ -67,7 +72,7 @@ const getUpdatedActiveOrder = async (order_id) => {
 FROM orders 
 INNER JOIN Order_Items ON orders.order_id = Order_Items.order_id 
 INNER JOIN Menu_Items ON Order_Items.item_id = Menu_Items.item_id 
-LEFT JOIN Online_Payments ON orders.order_id = Online_Payments.order_id 
+LEFT JOIN Online_Payments ON orders.order_id = Online_Payments.order_id INNER JOIN users ON orders.user_id = users.user_id 
 WHERE orders.order_id = ?`;
   const rows = await pool.query(query, [order_id]);
 
@@ -81,10 +86,29 @@ const updateOrderStatus = async (order_id) => {
 }
 
 const searchOrder = async (q) => {
-    const query = `SELECT * FROM orders  WHERE order_id LIKE ? OR  payment_method = ?  OR phone LIKE ? OR order_total_price LIKE ? OR currency LIKE ? OR order_date LIKE ?`;
+    const query = `SELECT * FROM orders 
+INNER JOIN users ON orders.user_id = users.user_id 
+WHERE orders.order_status = 'pending' 
+AND (orders.order_id LIKE ? OR orders.payment_method = ? OR orders.phone LIKE ? OR orders.currency LIKE ? OR users.username LIKE ?)`;
     const rows = await pool.query(query, ["%" + q + "%", "%" + q + "%", "%" + q + "%", "%" + q + "%", "%" + q + "%", "%" + q + "%"]);
     return rows[0];
 }
+const searchCompletedOrders = async (q) => {
+  const query = `SELECT * FROM orders 
+INNER JOIN users ON orders.user_id = users.user_id 
+WHERE orders.order_status = 'success' 
+AND (orders.order_id LIKE ? OR orders.payment_method = ? OR orders.phone LIKE ? OR orders.currency LIKE ? OR users.username LIKE ?)
+`;
+  const rows = await pool.query(query, [
+    "%" + q + "%",
+    "%" + q + "%",
+    "%" + q + "%",
+    "%" + q + "%",
+    "%" + q + "%",
+    "%" + q + "%",
+  ]);
+  return rows[0];
+};
 
 
 const order_service = {
@@ -96,5 +120,7 @@ const order_service = {
   getUpdatedActiveOrder,
   updateOrderStatus,
   searchOrder,
+  getAllCompletedOrders,
+  searchCompletedOrders,
 };
 module.exports = order_service

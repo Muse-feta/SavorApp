@@ -36,15 +36,15 @@ const Header = () => {
   return (
     <div className="sticky top-0 z-10">
       <div
-        class={`top-header-area ${show ? " bg-[#051922] h-[90px]" : null}`}
+        className={`top-header-area ${show ? " bg-[#051922] h-[90px]" : null}`}
         id="sticker"
       >
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-12 col-sm-12 text-center">
-              <div class="main-menu-wrap ">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12 col-sm-12 text-center">
+              <div className="main-menu-wrap ">
                 {/* <!-- logo --> */}
-                <div class="site-logo">
+                <div className="site-logo">
                   <Link to="/">
                     <img
                       className=" w-[70px] mt-[-20px] ml-3"
@@ -56,9 +56,9 @@ const Header = () => {
                 {/* <!-- logo --> */}
 
                 {/* <!-- menu start --> */}
-                <nav class="main-menu ">
+                <nav className="main-menu ">
                   <ul className="">
-                    <li class="current-list-item">
+                    <li className="current-list-item">
                       <a href="#">Home</a>
                     </li>
                     <li>
@@ -75,9 +75,9 @@ const Header = () => {
                     )}
 
                     <li>
-                      <div class="header-icons">
-                        <Link class="shopping-cart" to={isEmpty ? "/empty-cart" : `/cart`}>
-                          <i class="fas fa-shopping-cart"></i>
+                      <div className="header-icons">
+                        <Link className="shopping-cart" to={isEmpty ? "/empty-cart" : `/cart`}>
+                          <i className="fas fa-shopping-cart"></i>
                         </Link>
 
                         {isLogin ? (
@@ -101,7 +101,7 @@ const Header = () => {
                   </ul>
                 </nav>
 
-                <div class="mobile-menu"></div>
+                <div className="mobile-menu"></div>
                 {/* <!-- menu end --> */}
               </div>
             </div>

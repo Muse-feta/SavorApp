@@ -8,11 +8,13 @@ import { Button, IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { CircularPagination } from "./CircularPagination";
 import { IoSearchSharp } from "react-icons/io5";
+import CompletedOrders from "./CompletedOrders";
  
 
 const OrdesComp = () => {
   const [activeOrders, setActiveOrders] = useState([]);
   const user = useSelector((state) => state.auth.user);
+   const [originalOrders, setOriginalOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   // const [active, setActive] = useState(1);
@@ -37,23 +39,25 @@ const OrdesComp = () => {
         const data = await orderServices.getAllActiveOrders();
         console.log(data.data);
         setActiveOrders(data.data);
+        setOriginalOrders(data.data);
         setOrderId(data.data[0].order_id);
       }
     };
     fetchAllActiveOrders();
   }, [id]);
 
- useEffect(() => {
-   const searchOrder = async () => {
-    if (searchTerm) {
-      const result = await orderServices.searchOrder(searchTerm);
-      //  console.log(result.data);
-      setActiveOrders(result.data);
-    }
-    
-    }
+  useEffect(() => {
+    const searchOrder = async () => {
+      if (searchTerm) {
+        const result = await orderServices.searchOrder(searchTerm);
+        setActiveOrders(result.data);
+      } else {
+        // If search term is empty, reset to original data
+        setActiveOrders(originalOrders);
+      }
+    };
     searchOrder();
- }, [searchTerm]);
+  }, [searchTerm, originalOrders]);
 
   // Pagination
   // Calculate current page's orders
@@ -89,6 +93,9 @@ const OrdesComp = () => {
                   Order ID
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Username
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Total Price
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -114,6 +121,9 @@ const OrdesComp = () => {
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
                     {order.order_id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {order.username}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {order.order_total_price}
@@ -144,6 +154,10 @@ const OrdesComp = () => {
             />
           </div>
         </div>
+      </div>
+      <div className="mt-20">
+
+      <CompletedOrders />
       </div>
     </div>
   );

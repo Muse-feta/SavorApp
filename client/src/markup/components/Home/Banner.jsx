@@ -8,28 +8,28 @@ const Banner = () => {
   // console.log(user.username)
   return (
     <div className=" h-[600px]">
-      <div class="hero-area bg-image">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-9 offset-lg-2 text-center">
-              <div class="hero-text">
-                <div class="hero-text-tablecell">
+      <div className="hero-area bg-image">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-9 offset-lg-2 text-center">
+              <div className="hero-text">
+                <div className="hero-text-tablecell">
                   {isLogin ? (
                     <div>
-                      <p class="subtitle">Welcome {user?.username}</p>
+                      <p className="subtitle">Welcome {user?.username}</p>
                       <h1>Fresh and Organic</h1>
                     </div>
                   ) : (
                     <div>
-                      <p class="subtitle">Fresh and Organic</p>
+                      <p className="subtitle">Fresh and Organic</p>
                       <h1>Savour</h1>
                     </div>
                   )}
-                  <div class="hero-btns">
-                    <a href="shop.html" class="boxed-btn">
+                  <div className="hero-btns">
+                    <a href="shop.html" className="boxed-btn">
                       Fruit Collection
                     </a>
-                    <Link to="/admin/dashbored" class="bordered-btn">
+                    <Link to="/admin/dashbored" className="bordered-btn">
                       Contact Us
                     </Link>
                   </div>

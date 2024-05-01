@@ -6,9 +6,11 @@ import { format } from "date-fns";
 
 import banner from "../../../assets/img/frenchnobg.png";
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { button } from '@material-tailwind/react';
 
 const OrderDetailComp = () => {
     const id = window.location.pathname.split("/")[2]
+    const token = useSelector((state) => state.auth.token);
      const user = useSelector((state) => state.auth.user);
      const navigate = useNavigate();
     //  console.log(user)
@@ -90,9 +92,9 @@ const OrderDetailComp = () => {
 
         const handleUpdateOrderStatus = () => {
           const res = orderServices
-            .updateOrderStatus(id)
+            .updateOrderStatus(id, token)
             .then((res) => {
-              // console.log(res.message);
+              console.log(res.message);
               toast.success(res.message, {
                 position: "top-center",
                 autoClose: 5000,
@@ -104,12 +106,14 @@ const OrderDetailComp = () => {
                 theme: "light",
                 transition: Bounce,
               });
-              navigate("/admin/orders");
+              // navigate("/admin/orders");
             })
             .catch((err) => {
               console.log(err);
             });
         }
+
+      
   return (
     <div>
       <div class="checkout-section mt-5 mb-150">
@@ -149,6 +153,10 @@ const OrderDetailComp = () => {
                               </span>
                             </h1>
                             <h1>
+                              <span className="font-bold">Username: </span>{" "}
+                              <span>{updatedOrderDetail[0].username}</span>
+                            </h1>
+                            <h1>
                               <span className="font-bold">Phone Number: </span>{" "}
                               <span>{updatedOrderDetail[0].phone}</span>
                             </h1>
@@ -167,26 +175,31 @@ const OrderDetailComp = () => {
                               </span>
                             </h1>
 
-                            {updatedOrderDetail[0].payment_method ===
-                            "Online" ? (
-                              <h1>
-                                <span className="font-bold">
-                                  Payement Status:{" "}
-                                </span>
-                                <span>
-                                  {updatedOrderDetail[0].payment_status ===
-                                  "success"
-                                    ? "Paid"
-                                    : "Unpaid"}
-                                </span>
-                              </h1>
-                            ) : (
-                              <h1>
-                                <span className="font-bold">
-                                  Payement Status:{" "}
-                                </span>{" "}
-                                <span>Unpaid</span>
-                              </h1>
+                            {updatedOrderDetail[0].order_status ===
+                              "Pending" && (
+                              <div>
+                                {updatedOrderDetail[0].payment_method ===
+                                "Online" ? (
+                                  <h1>
+                                    <span className="font-bold">
+                                      Payement Status:{" "}
+                                    </span>
+                                    <span>
+                                      {updatedOrderDetail[0].payment_status ===
+                                      "success"
+                                        ? "Paid"
+                                        : "Unpaid"}
+                                    </span>
+                                  </h1>
+                                ) : (
+                                  <h1 className=" md:flex">
+                                    <span className="font-bold">
+                                      Payement Status:{" "}
+                                    </span>{" "}
+                                    <span className="md:mr-5">Unpaid</span>
+                                  </h1>
+                                )}
+                              </div>
                             )}
                             {updatedOrderDetail[0].payment_method ===
                               "Online" && (

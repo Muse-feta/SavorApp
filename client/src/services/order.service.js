@@ -16,7 +16,28 @@ const getActiveOrders = async (id) => {
 const getAllActiveOrders = async () => {
     try {
         const response = await axios.get(
-          `${api_url}/api/get-all-active-orders`
+          `${api_url}/api/get-all-active-orders`,
+          {
+            headers: {
+              "x-access-token": localStorage.getItem("token"),
+            },
+          }
+        );
+        return response.data;
+    } catch (error) {
+        return error.response.data;
+    }
+};
+
+const getAllCompletedOrders = async () => {
+    try {
+        const response = await axios.get(
+          `${api_url}/api/get-all-completed-orders`,
+          {
+            headers: {
+              "x-access-token": localStorage.getItem("token"),
+            },
+          }
         );
         return response.data;
     } catch (error) {
@@ -67,10 +88,15 @@ const getUpdatedActiveOrders = async (order_id) => {
     }
 };
 
-const updateOrderStatus = async (order_id) => {
+const updateOrderStatus = async (order_id, token) => {
     try {
         const response = await axios.put(
-          `${api_url}/api/update-order-status/${order_id}`
+          `${api_url}/api/update-order-status/${order_id}`,
+          {
+            headers: {
+              "x-access-token": token,
+            },
+          }
         );
         return response.data;
     } catch (error) {
@@ -86,6 +112,18 @@ const searchOrder = async (q) => {
         return error
     }
 }
+const searchCompletedOrders = async (q) => {
+  try {
+    const response = await axios.get(
+      `${api_url}/api/search-completed/order/${q}`
+    );
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};
+
+
 
 const orderServices = {
     getActiveOrders,
@@ -95,6 +133,8 @@ const orderServices = {
     updateTransactionStatus,
     getUpdatedActiveOrders,
     updateOrderStatus,
-    searchOrder
+    searchOrder,
+    getAllCompletedOrders,
+    searchCompletedOrders
 };
 export default orderServices
