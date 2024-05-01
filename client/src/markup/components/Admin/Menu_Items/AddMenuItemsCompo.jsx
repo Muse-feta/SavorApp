@@ -165,7 +165,7 @@ const AddMenuItems = () => {
                 className="outline-none   bg-[#fbfbfb]  "
                 type="text"
                 name="name"
-                placeholder="Catagory Name"
+                placeholder="Item Name"
                 onChange={handleChange}
                 value={formData.name}
               />

@@ -11,6 +11,7 @@ import { button } from '@material-tailwind/react';
 const OrderDetailComp = () => {
     const id = window.location.pathname.split("/")[2]
     const token = useSelector((state) => state.auth.token);
+    console.log(token)
      const user = useSelector((state) => state.auth.user);
      const navigate = useNavigate();
     //  console.log(user)
