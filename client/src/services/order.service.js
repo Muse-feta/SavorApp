@@ -78,6 +78,15 @@ const updateOrderStatus = async (order_id) => {
     }
 }
 
+const searchOrder = async (q) => {
+    try {
+        const response = await axios.get(`${api_url}/api/search/order/${q}`);
+        return response.data;
+    } catch (error) {
+        return error
+    }
+}
+
 const orderServices = {
     getActiveOrders,
     getAllActiveOrders,
@@ -85,6 +94,7 @@ const orderServices = {
     verifyTransaction,
     updateTransactionStatus,
     getUpdatedActiveOrders,
-    updateOrderStatus
+    updateOrderStatus,
+    searchOrder
 };
 export default orderServices

@@ -80,14 +80,21 @@ const updateOrderStatus = async (order_id) => {
    return rows[0].affectedRows;
 }
 
+const searchOrder = async (q) => {
+    const query = `SELECT * FROM orders  WHERE order_id LIKE ? OR  payment_method = ?  OR phone LIKE ? OR order_total_price LIKE ? OR currency LIKE ? OR order_date LIKE ?`;
+    const rows = await pool.query(query, ["%" + q + "%", "%" + q + "%", "%" + q + "%", "%" + q + "%", "%" + q + "%", "%" + q + "%"]);
+    return rows[0];
+}
+
 
 const order_service = {
-    getOrderById,
-    getActiveOrderDetail,
-    getAllActiveOrders,
-    verifyTransaction,
-    updateTransactionStatus,
-    getUpdatedActiveOrder,
-    updateOrderStatus
-}
+  getOrderById,
+  getActiveOrderDetail,
+  getAllActiveOrders,
+  verifyTransaction,
+  updateTransactionStatus,
+  getUpdatedActiveOrder,
+  updateOrderStatus,
+  searchOrder,
+};
 module.exports = order_service

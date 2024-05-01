@@ -7,11 +7,13 @@ import orderServices from "../../../../services/order.service";
 import { Button, IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { CircularPagination } from "./CircularPagination";
+import { IoSearchSharp } from "react-icons/io5";
  
 
 const OrdesComp = () => {
   const [activeOrders, setActiveOrders] = useState([]);
   const user = useSelector((state) => state.auth.user);
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   // const [active, setActive] = useState(1);
   const [ordersPerPage] = useState(5);
@@ -41,6 +43,18 @@ const OrdesComp = () => {
     fetchAllActiveOrders();
   }, [id]);
 
+ useEffect(() => {
+   const searchOrder = async () => {
+    if (searchTerm) {
+      const result = await orderServices.searchOrder(searchTerm);
+      //  console.log(result.data);
+      setActiveOrders(result.data);
+    }
+    
+    }
+    searchOrder();
+ }, [searchTerm]);
+
   // Pagination
   // Calculate current page's orders
   const indexOfLastOrder = currentPage * ordersPerPage;
@@ -54,6 +68,20 @@ const OrdesComp = () => {
       <div className="container mx-auto xl:w-3/4 2xl:w-1/2">
         <h2 className="text-xl font-bold mb-4">Active Orders</h2>
         <div className="overflow-x-auto">
+          {/* code the searchbar */}
+          <div className="flex border border-gray-300 rounded-md p-2 my-2">
+            <input
+              type="text"
+              className="w-full focus:outline-none"
+              placeholder="Search Orders"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <p className="p-2">
+              <IoSearchSharp />
+            </p>
+          </div>
+
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
