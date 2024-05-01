@@ -12,6 +12,7 @@ router.get(
   "/api/updated-active-order/:order_id",
   order_controller.getUpdatedActiveOrder
 );
+router.get("/api/search/order/:q", order_controller.searchOrder);
 
 
 module.exports = router;

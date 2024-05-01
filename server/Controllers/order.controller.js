@@ -111,6 +111,22 @@ const updateOrderStatus = async (req, res) => {
   }
 }
 
+const searchOrder = async (req, res) => {
+  const q = req.params.q;
+  const result = await order_service.searchOrder(q);
+  if (result) {
+    return res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } else {
+    return res.status(500).json({
+      success: false,
+      message: "No Orders found",
+    });
+  }
+}
+
 
 const order_controller = {
   getOrderById,
@@ -119,6 +135,7 @@ const order_controller = {
   updateTransactionStatus,
   getUpdatedActiveOrder,
   getAllActiveOrders,
-  updateOrderStatus
+  updateOrderStatus,
+  searchOrder
 };
 module.exports = order_controller
