@@ -8,6 +8,11 @@ import { useCart } from "react-use-cart";
 const Header = () => {
    const { isEmpty, totalUniqueItems, items, updateItemQuantity, removeItem } =
      useCart();
+     let totalQuantity = 0;
+
+     items.forEach((item) => {
+       totalQuantity += item.quantity;
+     });
    const [show, handleShow] = useState(false);
    const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.auth.isLogin);
@@ -77,7 +82,7 @@ const Header = () => {
                     <li>
                       <div className="header-icons">
                         <Link className="shopping-cart" to={isEmpty ? "/empty-cart" : `/cart`}>
-                          <i className="fas fa-shopping-cart"></i>
+                          <i className="fas fa-shopping-cart"><span className=' text-lg mx-2 font-serif'>{totalQuantity}</span></i>
                         </Link>
 
                         {isLogin ? (

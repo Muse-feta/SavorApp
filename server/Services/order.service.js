@@ -6,7 +6,7 @@ const CHAPA_AUTH_KEY = process.env.CHAPA_AUTH_KEY //Put Your Chapa Secret Key
 
 const getOrderById = async (id) => {
 
-    const query = `SELECT * FROM orders WHERE user_id = ? and order_status = ?`;
+    const query = `SELECT * FROM orders WHERE user_id = ? and order_status = ? ORDER BY order_id DESC`;
     const rows = await pool.query(query, [id, "pending"]);
     return rows[0];
 };

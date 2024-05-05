@@ -33,6 +33,8 @@ import EmptyCart from './markup/pages/EmptyCart';
 import OrderStatus from './markup/pages/OrderStatus';
 import OrderDetail from './markup/pages/OrderDetail';
 import Orders from './markup/pages/Admin/Orders';
+import Users from './markup/pages/Admin/Users';
+import Page404 from './markup/pages/Page404';
 
 
 
@@ -54,6 +56,7 @@ const App = () => {
     <div>
       <Routes>
         <Route path="/" element={<SharedLayout />}>
+          <Route path="*" element={<Page404/>} />
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/empty-cart" element={<EmptyCart />} />
@@ -111,6 +114,14 @@ const App = () => {
             element={
               <PrivateAuthRoute roles={["admin"]}>
                 <Orders/>
+              </PrivateAuthRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <PrivateAuthRoute roles={["admin"]}>
+                <Users/>
               </PrivateAuthRoute>
             }
           />

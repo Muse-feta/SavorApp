@@ -92,6 +92,7 @@ const updateOrderStatus = async (order_id, token) => {
     try {
         const response = await axios.put(
           `${api_url}/api/update-order-status/${order_id}`,
+          {},
           {
             headers: {
               "x-access-token": token,
