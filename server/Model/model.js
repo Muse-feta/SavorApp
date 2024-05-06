@@ -11,10 +11,8 @@ const Users = `CREATE TABLE IF NOT EXISTS Users (
 // -- Create user_info table
 const Users_Info = `CREATE TABLE IF NOT EXISTS Users_Info (
     user_id INT,
-    firstname VARCHAR(100),
-    lastname VARCHAR(100),
-    address VARCHAR(255),
     role VARCHAR(50),
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 )`;
 
@@ -72,17 +70,7 @@ const Online_Payments = `CREATE TABLE IF NOT EXISTS Online_Payments (
     FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 )`;
 
-// -- Create Manual_Checkout_Information table
-const Manual_Checkout_Information = `CREATE TABLE IF NOT EXISTS Manual_Checkout_Information (
-    checkout_id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT,
-    user_id INT,
-    payment_method VARCHAR(100), 
-    payment_status VARCHAR(100), 
-    payment_date TIMESTAMP, 
-    FOREIGN KEY (order_id) REFERENCES Orders(order_id),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
-)`;
+
 
 // -- Create Feedback table
 const Feedback = `CREATE TABLE IF NOT EXISTS Feedback (
@@ -102,6 +90,6 @@ module.exports = {
   Orders,
   Order_Items,
   Online_Payments,
-  Manual_Checkout_Information,
+//   Manual_Checkout_Information,
   Feedback,
 };

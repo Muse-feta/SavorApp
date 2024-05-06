@@ -125,5 +125,37 @@ const resetPassword = async (req, res) => {
     }
 }
 
-const userController = { register, forgotPassword, resetPassword };
+const getAllUsers = async (req, res) => {
+    const users = await userService.getAllUsers();
+    if(users) {
+        return res.status(200).json({
+            success: true,
+            message: 'Users retrieved successfully',
+            data: users
+        })
+    }else {
+        return res.status(500).json({
+            success: false,
+            message: 'Users not retrieved'
+        })
+    }
+}
+
+const searchUsers = async (req, res) => {
+    const users = await userService.searchUsers(req.params.q);
+    if(users) {
+        return res.status(200).json({
+            success: true,
+            message: 'Users retrieved successfully',
+            data: users
+        })
+    }else {
+        return res.status(500).json({
+            success: false,
+            message: 'Users not retrieved'
+        })
+    }
+}
+
+const userController = { register, forgotPassword, resetPassword, getAllUsers, searchUsers };
 module.exports = userController

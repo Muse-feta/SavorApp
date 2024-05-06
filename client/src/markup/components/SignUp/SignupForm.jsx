@@ -17,9 +17,6 @@ const SignupForm = () => {
     phone: "",
     email: "",
     password: "",
-    firstname: "",
-    lastname: "",
-    address: "",
     role: "customer",
   });
 
@@ -108,51 +105,6 @@ const SignupForm = () => {
                      });
                      valid = false;
                    }
-
-                    if (!form.firstname) {
-                      toast.error("Firstname is required", {
-                        position: "top-center",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                        transition: Bounce,
-                      });
-                      valid = false;
-                    }
-
-                        if (!form.lastname) {
-                          toast.error("Lastname is required", {
-                            position: "top-center",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light",
-                            transition: Bounce,
-                          });
-                          valid = false;
-                        }
-
-                            if (!form.address) {
-                              toast.error("Address is required", {
-                                position: "top-center",
-                                autoClose: 5000,
-                                hideProgressBar: false,
-                                closeOnClick: true,
-                                pauseOnHover: true,
-                                draggable: true,
-                                progress: undefined,
-                                theme: "light",
-                                transition: Bounce,
-                              });
-                              valid = false;
-                            }
 
                             if (!valid) {
                               return;
@@ -279,52 +231,8 @@ const SignupForm = () => {
                   onChange={handleChange}
               />
             </div>
-            {/* firstname input */}
-            <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
-              <div className=" mt-[6px] opacity-[30%] mr-2">
-                {<FaUserEdit />}
-              </div>
 
-              <input
-                className="outline-none  bg-[#f7f7f7] "
-                type="text"
-                name="firstname"
-                placeholder="First Name"
-                value={form.firstname}
-                onChange={handleChange}
-              />
-            </div>
-            {/* lastname input */}
-            <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
-              <div className=" mt-[6px] opacity-[30%] mr-2">
-                {<FaUserEdit />}
-              </div>
-
-              <input
-                className="outline-none  bg-[#f7f7f7] "
-                type="text"
-                name="lastname"
-                placeholder="Last Name"
-                value={form.lastname}
-                onChange={handleChange}
-              />
-            </div>
-
-            {/* address input */}
-            <div className="flex outline-none border-l-4 border-[#f4a53e] p-4 bg-[#f7f7f7] py-3 px-3 mb-3 w-[100%] sm:w-[100%]">
-              <div className=" mt-[6px] opacity-[30%] mr-2">
-                {<FaAddressBook />}
-              </div>
-
-              <input
-                className="outline-none  bg-[#f7f7f7] "
-                type="text"
-                name="address"
-                placeholder="Address"
-                value={form.address}
-                onChange={handleChange}
-              />
-            </div>
+            {/* <!-- Submit button --> */}
 
             {/* Hello, how about our team meeting */}
             <p className=" m-2 text-sm">

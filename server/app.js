@@ -30,7 +30,7 @@ const startApp = async () => {
     pool.query(Orders);
     pool.query(Order_Items);
     pool.query(Online_Payments);
-    pool.query(Manual_Checkout_Information);
+    // pool.query(Manual_Checkout_Information);
     pool.query(Feedback);
     console.log("all tables has been created");
   } catch (error) {

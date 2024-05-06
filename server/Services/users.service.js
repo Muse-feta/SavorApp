@@ -28,12 +28,9 @@ const createUser = async (user) => {
            return false;
          }
 
-         const query2 = `INSERT INTO users_info ( user_id, firstname, lastname, address, role ) VALUES (?, ?, ?, ?, ?)`;
+         const query2 = `INSERT INTO users_info ( user_id, role ) VALUES (?, ?)`;
          const rows2 = await pool.query(query2, [
            user_id,
-           user.firstname,
-           user.lastname,
-           user.address,
            user.role
          ])
          createdUser = {
@@ -65,12 +62,26 @@ const resetPassword = async (password, email) => {
     return rows[0]
 }
 
+const getAllUsers = async () => {
+    const query = 'SELECT * FROM users INNER JOIN users_info ON users.user_id = users_info.user_id';
+    const rows = await pool.query(query);
+    return rows[0]
+}
+
+const searchUsers = async (q) => {
+    const query = 'SELECT * FROM users INNER JOIN users_info ON users.user_id = users_info.user_id WHERE username LIKE ? OR email LIKE ? OR phone LIKE  ? OR role LIKE ? OR users.user_id LIKE ?';
+    const rows = await pool.query(query, ["%" + q + "%", "%" + q + "%", "%" + q + "%", "%" + q + "%" ,"%"+q+"%"]);
+    return rows[0]
+}
+
 
 const userService = {
-    isUserExist,
-    createUser,
-    getUserByEmail,
-    resetPassword
-}
+  isUserExist,
+  createUser,
+  getUserByEmail,
+  resetPassword,
+  getAllUsers,
+  searchUsers,
+};
 
 module.exports = userService
