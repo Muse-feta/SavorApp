@@ -9,56 +9,56 @@ import { SwitchColors } from '../../../../utils/ToggleSwitch';
 
 
 const UsersComp = () => {
-   const [users, setUsers] = useState([]);
-   const [isChecked, setIsChecked] = useState(false);
-   const [originalUsers, setOriginalUsers] = useState([]);
-   const user = useSelector((state) => state.auth.user);
-   const [searchTerm, setSearchTerm] = useState("");
-   const [currentPage, setCurrentPage] = useState(1);
-   const [usersPerPage] = useState(5);
+  const [users, setUsers] = useState([]);
+  //  const [isChecked, setIsChecked] = useState(false);
+  const [originalUsers, setOriginalUsers] = useState([]);
+  const user = useSelector((state) => state.auth.user);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [usersPerPage] = useState(5);
 
-   const handleCheckboxChange = () => {
-     setIsChecked(!isChecked);
-   };
+  // State to store checked status for each user
+  const [checkedUsers, setCheckedUsers] = useState({});
 
+  // Handler for toggling individual user's checkbox
+  const handleCheckboxChange = (userId) => {
+    setCheckedUsers((prevState) => ({
+      ...prevState,
+      [userId]: !prevState[userId], // Toggle the checked status for the user
+    }));
+  };
 
-     useEffect(() => {
-       const fetchAllUsers = async () => {
-         
-           const data = await usersServices.getAllUsers();
-           console.log(data.data);
-           setUsers(data.data);
-           setOriginalUsers(data.data);
-       
-       };
-       fetchAllUsers();
-     }, []);
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+      const data = await usersServices.getAllUsers();
+      console.log(data.data);
+      setUsers(data.data);
+      setOriginalUsers(data.data);
+    };
+    fetchAllUsers();
+  }, []);
 
+  useEffect(() => {
+    const searchUser = async () => {
+      if (searchTerm) {
+        const result = await usersServices.searchUsers(searchTerm);
+        setUsers(result.data);
+      } else {
+        // If search term is empty, reset to original data
+        setUsers(originalUsers);
+      }
+    };
+    searchUser();
+  }, [searchTerm, originalUsers]);
 
-    useEffect(() => {
-      const searchUser = async () => {
-        if (searchTerm) {
-          const result = await usersServices.searchUsers(searchTerm);
-          setUsers(result.data);
-        } else {
-          // If search term is empty, reset to original data
-          setUsers(originalUsers);
-        }
-      };
-      searchUser();
-    }, [searchTerm, originalUsers]);
+  // Pagination
+  // Calculate current page's orders
+  const indexOfLastOrder = currentPage * usersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - usersPerPage;
+  const currentOrders = users.slice(indexOfFirstOrder, indexOfLastOrder);
 
-    // Pagination
-    // Calculate current page's orders
-    const indexOfLastOrder = currentPage * usersPerPage;
-    const indexOfFirstOrder = indexOfLastOrder - usersPerPage;
-    const currentOrders = users.slice(
-      indexOfFirstOrder,
-      indexOfLastOrder
-    );
-
-    // Pagination handler
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // Pagination handler
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <div className="checkout-section mt-[30px] mb-[30px]">
       <div className="container mx-auto xl:w-3/4 2xl:w-1/2">
@@ -136,13 +136,13 @@ const UsersComp = () => {
                         <input
                           type="checkbox"
                           className="sr-only"
-                          checked={isChecked}
-                          onChange={handleCheckboxChange}
+                          checked={checkedUsers[user.user_id] || false}
+                          onChange={() => handleCheckboxChange(user.user_id)}
                         />
                         <div className="block bg-gray-300 w-14 h-8 rounded-full"></div>
                         <div
                           className={`absolute left-1 top-1 bg-white w-6 h-6 rounded-full shadow transition ${
-                            isChecked
+                            checkedUsers[user.user_id]
                               ? "transform translate-x-6 bg-green-500"
                               : ""
                           }`}
